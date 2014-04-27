@@ -1,0 +1,16 @@
+{
+  "name": "bookie",
+  "description": "Bookkeeping system used by Fairy.",
+  "version": "0.0.0",
+  "private": true,
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^1.9.1"
+  },
+  "dependencies": {
+    "lodash": "^2.4.1"
+  },
+  "scripts": {
+  	"test": "mocha test --reporter spec"
+  }
+}
