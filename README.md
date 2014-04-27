@@ -1,4 +1,4 @@
 bookie.js
 =========
 
-Book keeping system used by Fairy
+Bookkeeping system used by Fairy
