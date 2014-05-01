@@ -5,12 +5,23 @@
   "private": true,
   "license": "MIT",
   "devDependencies": {
-    "chai": "^1.9.1"
+    "chai": "^1.9.1",
+    "load-grunt-tasks": "^0.4.0",
+    "grunt-mocha-test": "^0.10.2",
+    "grunt": "^0.4.4",
+    "browserify": "^3.44.2",
+    "grunt-browserify": "^2.0.8",
+    "karma": "^0.12.14",
+    "mocha": "^1.18.2",
+    "karma-mocha": "^0.1.3",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^0.1.3",
+    "grunt-karma": "^0.8.3"
   },
   "dependencies": {
     "lodash": "^2.4.1"
   },
   "scripts": {
-  	"test": "mocha test --reporter spec"
+    "test": "grunt test"
   }
 }

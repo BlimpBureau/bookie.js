@@ -1,8 +1,3 @@
-var bookie = require("../bookie.js");
-var chai = require("chai");
-var _ = require("lodash");
-var expect = chai.expect;
-
 function makeTransactions(book) {
     book.createVerification("2012-02-11", "Domain names").credit(2010, 188).debit(2640, 37.6).debit(6500, 150.4);
     book.createVerification("2012-03-04", "Paper holders").credit(2010, 29).debit(2640, 5.8).debit(6100, 23.2);
@@ -26,55 +21,27 @@ describe("bookie.js", function() {
         expect(bookie).to.be.a("object");
     });
 
-    describe("runInContext", function() {
-        it("should be defined in bookie object", function() {
-            expect(bookie.runInContext).to.be.a("function");
-        });
-    });
-
     describe("round", function() {
         it("should be defined and have roundDecimals in place", function() {
             expect(bookie.round).to.be.a("function");
-            expect(bookie.roundDecimals).to.be.a("number");
         });
 
         it("should round numbers to the set decimals of roundDecimals", function() {
-            bookie.roundDecimals = 2;
             expect(bookie.round(19.3141)).to.equal(19.31);
             expect(bookie.round(15.5)).to.equal(15.5);
             expect(bookie.round(15.555)).to.equal(15.56);
             expect(bookie.round(0.001)).to.equal(0);
 
             bookie.roundDecimals = 1;
-            expect(bookie.round(19.3141)).to.equal(19.3);
-            expect(bookie.round(15.5)).to.equal(15.5);
-            expect(bookie.round(15.555)).to.equal(15.6);
-            expect(bookie.round(0.001)).to.equal(0);
-
-            bookie.roundDecimals = 2;
-        });
-
-        it("should override roundDecimals if decimals parameter is set", function() {
-            bookie.roundDecimals = 3;
-            expect(bookie.round(19.3141, 2)).to.equal(19.31);
-            expect(bookie.round(15.5, 2)).to.equal(15.5);
-            expect(bookie.round(15.555, 2)).to.equal(15.56);
-            expect(bookie.round(0.001, 2)).to.equal(0);
-
             expect(bookie.round(19.3141, 1)).to.equal(19.3);
             expect(bookie.round(15.5, 1)).to.equal(15.5);
             expect(bookie.round(15.555, 1)).to.equal(15.6);
             expect(bookie.round(0.001, 1)).to.equal(0);
-
-            bookie.roundDecimals = 2;
         });
 
         it("should be able to round really big numbers", function() {
-            bookie.roundDecimals = 3;
-            expect(bookie.round(1031313124120102401204102412401204102.121241512)).to.equal(1031313124120102401204102412401204102.121);
-            expect(bookie.round(1031313124120102401204102412401204114124124125125151251251202.1399)).to.equal(1031313124120102401204102412401204114124124125125151251251202.14);
-
-            bookie.roundDecimals = 2;
+            expect(bookie.round(1031313124120102401204102412401204102.121241512, 3)).to.equal(1031313124120102401204102412401204102.121);
+            expect(bookie.round(1031313124120102401204102412401204114124124125125151251251202.1399, 3)).to.equal(1031313124120102401204102412401204114124124125125151251251202.14);
         });
     });
 
@@ -117,51 +84,6 @@ describe("bookie.js", function() {
         it("should have constructor defined", function() {
             expect(bookie.Book).to.be.a("function");
             expect((new bookie.Book()) instanceof bookie.Book).to.equal(true);
-        });
-
-        describe("createAccount", function() {
-            var book;
-
-            beforeEach(function() {
-                book = new bookie.Book();
-            });
-
-            it("should be defined", function() {
-                expect(book.createAccount).to.be.a("function");
-            });
-
-            it("Should create a new Account instance", function() {
-                var account = book.createAccount(1337, "test");
-                
-                expect(account.book).to.equal(book);
-                expect(account.number).to.equal(1337);
-                expect(account.name).to.equal("test");
-            });
-
-            it("Should not be able to create mutliple accounts with same number", function() {
-                book.createAccount(1337, "test");
-
-                expect(function() {
-                    book.createAccount(1337, "daw");
-                }).to.throw(Error);
-            });
-        });
-
-        describe("getAccount", function() {
-            var book;
-
-            beforeEach(function() {
-                book = new bookie.Book();
-            });
-
-            it("should be defined", function() {
-                expect(book.getAccount).to.be.a("function");
-            });
-
-            it("Should return accounts by number", function() {
-                expect(book.createAccount(1337, "test")).to.equal(book.getAccount(1337));
-                expect(book.getAccount(9999)).to.equal(null);
-            });
         });
 
         describe("createVerification", function() {
@@ -254,6 +176,57 @@ describe("bookie.js", function() {
                 makeTransactions(book);
             });
 
+            describe("createAccount", function() {
+                it("should be defined", function() {
+                    expect(book.createAccount).to.be.a("function");
+                });
+
+                it("Should create a new Account instance", function() {
+                    var account = book.createAccount(1337, "test");
+                    
+                    expect(account.book).to.equal(book);
+                    expect(account.number).to.equal(1337);
+                    expect(account.name).to.equal("test");
+                });
+
+                it("Should not be able to create mutliple accounts with same number", function() {
+                    book.createAccount(1337, "test");
+
+                    expect(function() {
+                        book.createAccount(1337, "daw");
+                    }).to.throw(Error);
+                });
+            });
+
+            describe("getAccount", function() {
+                it("should be defined", function() {
+                    expect(book.getAccount).to.be.a("function");
+                });
+
+                it("Should return accounts by number", function() {
+                    expect(book.createAccount(1337, "test")).to.equal(book.getAccount(1337));
+                    expect(book.getAccount(9999)).to.equal(null);
+                });
+            });
+
+            describe("getAccounts", function() {
+                it("should be defined", function() {
+                    expect(book.getAccounts).to.be.a("function");
+                });
+                
+                it("should return all accounts", function() {
+                    expect(book.getAccounts()).to.include.members([
+                        book.getAccount(1930),
+                        book.getAccount(2010),
+                        book.getAccount(2020),
+                        book.getAccount(2640),
+                        book.getAccount(5400),
+                        book.getAccount(6100),
+                        book.getAccount(6500),
+                    ]);
+                });
+            });
+
             it("should be able to sum transactions", function() {
                 expect(book.getAccount(2010).sumDebit()).to.equal(0)
                 expect(book.getAccount(2010).sumCredit()).to.equal(266);
@@ -292,6 +265,61 @@ describe("bookie.js", function() {
 
                 expect(book.getAccount(6500).sumDebit("2011-1-1", "2015-1-1")).to.equal(150.4);
                 expect(book.getAccount(6500).sumCredit()).to.equal(0);
+            });
+        });
+
+        describe("Classifying", function() {
+            var book;
+
+            beforeEach(function() {
+                book = new bookie.Book();
+                makeAccounts(book);
+                makeTransactions(book);
+            });
+
+            describe("addClassifier", function() {
+                it("should be defined", function() {
+                    expect(book.addClassifier).to.be.a("function");
+                });
+
+                it("should be able to add classifiers", function() {
+                    book.addClassifier("balance", function() {
+                        return "test";
+                    });
+
+                    expect(book.classifiers.balance).to.have.length(1);
+                    expect(book.classifiers.balance[0]()).to.equal("test");
+
+                    book.addClassifier("balance", function() {
+                        return 1337;
+                    });
+
+                    expect(book.classifiers.balance).to.have.length(2);
+                    expect(book.classifiers.balance[1]()).to.equal(1337);
+                });
+            });
+
+            it("getAccounts should be able to retrieve by classified type", function() {
+                book.addClassifier("balance", function(account) {
+                    return account.number >= 1000 && account.number < 3000;
+                });
+
+                book.addClassifier("result", function(account) {
+                    return account.number >= 3000 && account.number < 8000;
+                });
+
+                expect(book.getAccounts("balance")).to.eql([
+                    book.getAccount(1930),
+                    book.getAccount(2010),
+                    book.getAccount(2020),
+                    book.getAccount(2640)
+                ]);
+
+                expect(book.getAccounts("result")).to.eql([
+                    book.getAccount(5400),
+                    book.getAccount(6100),
+                    book.getAccount(6500)
+                ]);
             });
         });
     });
