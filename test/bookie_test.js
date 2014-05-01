@@ -1,3 +1,7 @@
+/* global describe, beforeEach, it, expect, bookie, _ */
+
+"use strict";
+
 function makeTransactions(book) {
     book.createVerification("2012-02-11", "Domain names").credit(2010, 188).debit(2640, 37.6).debit(6500, 150.4);
     book.createVerification("2012-03-04", "Paper holders").credit(2010, 29).debit(2640, 5.8).debit(6100, 23.2);
@@ -9,7 +13,7 @@ function makeTransactions(book) {
 function makeAccounts(book) {
     book.createAccount(1930, "Bank");
     book.createAccount(2010, "Own capital John Doe");
-    book.createAccount(2020, "Own capital Jane Doe")
+    book.createAccount(2020, "Own capital Jane Doe");
     book.createAccount(2640, "Incoming VAT 25 %");
     book.createAccount(5400, "Usage inventory");
     book.createAccount(6100, "Office material");
@@ -63,8 +67,6 @@ describe("bookie.js", function() {
         });
 
         it("should parse string dates to dates", function() {
-            var date;
-
             validDate(bookie.parseDate("2014-01-02"), 2014, 1, 2);
             validDate(bookie.parseDate("2014-1-2"), 2014, 1, 2);
         });
@@ -228,7 +230,7 @@ describe("bookie.js", function() {
             });
 
             it("should be able to sum transactions", function() {
-                expect(book.getAccount(2010).sumDebit()).to.equal(0)
+                expect(book.getAccount(2010).sumDebit()).to.equal(0);
                 expect(book.getAccount(2010).sumCredit()).to.equal(266);
 
                 expect(book.getAccount(2020).sumDebit()).to.equal(0);
@@ -248,7 +250,7 @@ describe("bookie.js", function() {
             });
 
             it("should be able to sum transactions by date filter", function() {
-                expect(book.getAccount(2010).sumDebit("2012-02-11")).to.equal(0)
+                expect(book.getAccount(2010).sumDebit("2012-02-11")).to.equal(0);
                 expect(book.getAccount(2010).sumCredit("2012-03-09")).to.equal(49);
 
                 expect(book.getAccount(2020).sumDebit()).to.equal(0);

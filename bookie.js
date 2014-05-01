@@ -1,4 +1,6 @@
 !function(e){if("object"==typeof exports)module.exports=e();else if("function"==typeof define&&define.amd)define(e);else{var o;"undefined"!=typeof window?o=window:"undefined"!=typeof global?o=global:"undefined"!=typeof self&&(o=self),o.bookie=e()}}(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);throw new Error("Cannot find module '"+o+"'")}var f=n[o]={exports:{}};t[o][0].call(f.exports,function(e){var n=t[o][1][e];return s(n?n:e)},f,f.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(_dereq_,module,exports){
+"use strict";
+
 var _ = _dereq_("lodash");
 var utils = _dereq_("./utils.js");
 
@@ -43,6 +45,8 @@ function sumTransactions(container, from, to) {
 }
 
 },{"./utils.js":4,"lodash":6}],2:[function(_dereq_,module,exports){
+"use strict";
+
 var _ = _dereq_("lodash");
 var utils = _dereq_("./utils.js");
 var Account = _dereq_("./account.js");
@@ -53,7 +57,7 @@ module.exports = Book;
 /**
  * Creates a bookkeeping book that holds verifications on account changes.
  */
-function Book(extension) {
+function Book() {
     //The accounts of the book are stored as the account number as key.
     this.accounts = {};
 
@@ -71,13 +75,13 @@ Book.prototype.createAccount = function(number, name) {
         throw new Error("An account with number " + number + "already exists.");
     }
 
-    var account = new Account(this, number, name)
+    var account = new Account(this, number, name);
     this.accounts[number] = account;
 
     this.classifiers = {};
 
     return account;
-}
+};
 
 Book.prototype.getAccount = function(number) {
     if(!_.isNumber(number)) {
@@ -87,7 +91,7 @@ Book.prototype.getAccount = function(number) {
     var account = this.accounts[number];
 
     return account || null;
-}
+};
 
 Book.prototype.createVerification = function(date, text) {
     var verification = new Verification(this, utils.parseDate(date), text);
@@ -95,11 +99,11 @@ Book.prototype.createVerification = function(date, text) {
     this.verifications.push(verification);
 
     return verification;
-}
+};
 
 Book.prototype.getNextVerificationNumber = function() {
     return this.nextVerificationNumber++;
-}
+};
 
 Book.prototype.addClassifier = function(type, classifier) {
     if(!_.isString(type)) {
@@ -115,7 +119,7 @@ Book.prototype.addClassifier = function(type, classifier) {
     }
 
     this.classifiers[type].push(classifier);
-}
+};
 
 Book.prototype.getAccounts = function(type) {
     var result = [];
@@ -127,7 +131,7 @@ Book.prototype.getAccounts = function(type) {
         var good = true;
         classifiers.forEach(function(classifier) {
             return (good = classifier(account));
-        })
+        });
 
         if(good) {
             result.push(account);
@@ -135,9 +139,11 @@ Book.prototype.getAccounts = function(type) {
     });
 
     return result;
-}
+};
 
 },{"./account.js":1,"./utils.js":4,"./verification.js":5,"lodash":6}],3:[function(_dereq_,module,exports){
+"use strict";
+
 var utils = _dereq_("./utils.js");
 var Book = _dereq_("./book.js");
 
@@ -146,6 +152,8 @@ exports.parseDate = utils.parseDate;
 exports.round = utils.round;
 
 },{"./book.js":2,"./utils.js":4}],4:[function(_dereq_,module,exports){
+"use strict";
+
 var _ = _dereq_("lodash");
 
 exports.parseDate = parseDate;
@@ -153,8 +161,8 @@ exports.round = round;
 
 function parseDate(date) {
     function zeroFix(index) {
-      if(parts[index].length == 1) {
-        parts[index] = '0' + parts[index];
+      if(parts[index].length === 1) {
+        parts[index] = "0" + parts[index];
       }
     }
 
@@ -166,7 +174,7 @@ function parseDate(date) {
         return null;
     }
 
-    var parts = date.split('-');
+    var parts = date.split("-");
 
     if(parts.length !== 3) {
         return null;
@@ -175,7 +183,7 @@ function parseDate(date) {
     zeroFix(1);
     zeroFix(2);
 
-    return new Date(parts.join('-'));
+    return new Date(parts.join("-"));
 }
 
 function round(number, decimals) {
@@ -196,12 +204,12 @@ function round(number, decimals) {
         }
 
         // Shift
-        number = number.toString().split('e');
-        number = Math.round(+(number[0] + 'e' + (number[1] ? (+number[1] - exp) : -exp)));
+        number = number.toString().split("e");
+        number = Math.round(+(number[0] + "e" + (number[1] ? (+number[1] - exp) : -exp)));
 
         // Shift back
-        number = number.toString().split('e');
-        return +(number[0] + 'e' + (number[1] ? (+number[1] + exp) : exp));
+        number = number.toString().split("e");
+        return +(number[0] + "e" + (number[1] ? (+number[1] + exp) : exp));
     }
 
     var d = decimals || 2;
@@ -213,6 +221,8 @@ function round(number, decimals) {
     return _round(number, -d);
 }
 },{"lodash":6}],5:[function(_dereq_,module,exports){
+"use strict";
+
 var _ = _dereq_("lodash");
 var utils = _dereq_("./utils.js");
 
@@ -279,7 +289,7 @@ function accountTransaction(verification, type, account, amount) {
 Verification.prototype.debit = function(account, amount) {
     accountTransaction(this, "debit", account, amount);
     return this;
-}
+};
 
 /**
  * Credits an account in the verification.
@@ -288,7 +298,7 @@ Verification.prototype.debit = function(account, amount) {
 Verification.prototype.credit = function(account, amount) {
     accountTransaction(this, "credit", account, amount);
     return this;
-}
+};
 
 /**
  * Checks so that the sum of credit amounts equal the sum of debit amounts.
@@ -296,7 +306,7 @@ Verification.prototype.credit = function(account, amount) {
  */
 Verification.prototype.isBalancedCreditDebit = function() {
     return sumTransactions(this.debits) === sumTransactions(this.credits);
-}
+};
 
 function sumTransactions(container) {
     return _.reduce(container, function(sum, transaction) {
