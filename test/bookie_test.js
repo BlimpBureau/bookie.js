@@ -1,4 +1,5 @@
-/* global describe, beforeEach, it, expect, bookie, _ */
+/* jshint expr: true */
+/* global describe, beforeEach, it, expect, bookie, _ , sinon */
 
 "use strict";
 
@@ -170,7 +171,7 @@ describe("bookie.js", function() {
 
                 expect(spy).to.have.been.calledOnce;
                 expect(spy).to.have.been.calledWith(book);
-                expect(book.extensions["test"]).to.equal(extension);
+                expect(book.extensions.test).to.equal(extension);
             });
 
             it("should throw on using already applied extension", function() {
@@ -221,17 +222,6 @@ describe("bookie.js", function() {
                     book.use({
                         name: "test",
                         apply: true
-                    });
-                }).to.throw(Error);
-            });
-
-            it("should throw if extension failed to apply", function() {
-                expect(function() {
-                    book.use({
-                        name: "test",
-                        apply: function() {
-                            throw new Error();
-                        }
                     });
                 }).to.throw(Error);
             });

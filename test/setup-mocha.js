@@ -1,6 +1,8 @@
-/* global bookie:true, _:true, chai:true, expect:true */
+/* jshint strict:false */
+/* global bookie:true, _:true, chai:true, expect:true, bookieSwedishHBEF:true, sinon:true */
 
 bookie = require("../lib/bookie.js");
+bookieSwedishHBEF = require("../lib/extensions/swedish-hb-ef.js");
 _ = require("lodash");
 chai = require("chai");
 sinon = require("sinon");
