@@ -35,12 +35,8 @@ function sumTransactions(container, from, to) {
     from = utils.parseDate(from);
     to = utils.parseDate(to);
 
-    function isVerificationInsideDates(v) {
-        return (!from || v.date.getTime() >= from.getTime()) && (!to || v.date.getTime() <= to.getTime());
-    }
-
     return _.reduce(container, function(sum, transcation) {
-        return sum + (isVerificationInsideDates(transcation.verification) ? transcation.amount : 0);
+        return sum + (utils.insideDates(transcation.verification.date, from, to) ? transcation.amount : 0);
     }, 0) || 0;
 }
 
@@ -65,7 +61,27 @@ function Book() {
     this.verifications = [];
 
     this.nextVerificationNumber = 1;
+
+    this.extensions = {};
 }
+
+Book.prototype.use = function(extension) {
+    if(!_.isObject(extension) || !_.isString(extension.name) || !_.isFunction(extension.apply)) {
+        throw new Error("Invalid extension");
+    }
+
+    if(this.extensions[extension.name]) {
+        throw new Error("Extension " + extension.name + " already applied to this book.");
+    }
+
+    this.extension[name] = extension;
+
+    try {
+        extension.apply(this);
+    } catch(err) {
+        throw new Error("Failed to apply extension " + extension.name + ". Error: " + err);
+    }
+};
 
 /**
  * Creates a new account and adds it to the book.
@@ -99,6 +115,12 @@ Book.prototype.createVerification = function(date, text) {
     this.verifications.push(verification);
 
     return verification;
+};
+
+Book.prototype.getVerifications = function(from, to) {
+    return _.filter(this.verifications, function(v) {
+        return utils.insideDates(v.date, from, to);
+    });
 };
 
 Book.prototype.getNextVerificationNumber = function() {
@@ -158,6 +180,7 @@ var _ = _dereq_("lodash");
 
 exports.parseDate = parseDate;
 exports.round = round;
+exports.insideDates = insideDates;
 
 function parseDate(date) {
     function zeroFix(index) {
@@ -219,6 +242,14 @@ function round(number, decimals) {
     }
 
     return _round(number, -d);
+}
+
+function insideDates(date, from, to) {
+    if(!_.isDate(date)) {
+        throw new Error("Invalid date.");
+    }
+
+    return (!from || date.getTime() >= from.getTime()) && (!to || date.getTime() <= to.getTime());
 }
 },{"lodash":6}],5:[function(_dereq_,module,exports){
 "use strict";
