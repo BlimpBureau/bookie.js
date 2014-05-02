@@ -400,16 +400,27 @@ describe("bookie.js", function() {
                     expect(book.getAccounts).to.be.a("function");
                 });
                 
-                it("should return all accounts", function() {
-                    expect(book.getAccounts()).to.include.members([
-                        book.getAccount(1930),
-                        book.getAccount(2010),
-                        book.getAccount(2020),
-                        book.getAccount(2640),
-                        book.getAccount(5400),
-                        book.getAccount(6100),
-                        book.getAccount(6500),
-                    ]);
+                // Unsure about this functionality.
+                // it("should return all accounts", function() {
+                //     expect(book.getAccounts()).to.include.members([
+                //         book.getAccount(1930),
+                //         book.getAccount(2010),
+                //         book.getAccount(2020),
+                //         book.getAccount(2640),
+                //         book.getAccount(5400),
+                //         book.getAccount(6100),
+                //         book.getAccount(6500),
+                //     ]);
+                // });
+
+                it("should throw on unknown classifier type", function() {
+                    expect(function() {
+                        book.getAccounts("foo");
+                    }).to.throw(Error);
+
+                    expect(function() {
+                        book.getAccount();
+                    }).to.throw(Error);
                 });
             });
 
