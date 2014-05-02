@@ -142,6 +142,53 @@ describe("bookie.js", function() {
         });
     });
 
+    describe("vatOfPrice", function() {
+        it("should return the correct vat by price exclusive vat", function() {
+            expect(bookie.vatOfPrice(100, 0.25, false)).to.equal(25);
+        });
+
+        it("should default priceIncludingVat paramater to false", function() {
+            expect(bookie.vatOfPrice(100, 0.25)).to.equal(25);
+        });
+
+        it("should work with float vat values", function() {
+            expect(bookie.vatOfPrice(1, 0.1)).to.equal(0.1);
+        });
+
+        it("should return the correct vat by price inclusive vat", function() {
+            expect(bookie.vatOfPrice(100, 0.25, true)).to.equal(20);
+        });
+    });
+
+    describe("vatRateOfPrice", function() {
+        it("should return the correct vat rate by price exlcusive vat", function() {
+            expect(bookie.vatRateOfPrice(100, 25, false)).to.equal(0.25);
+        });
+
+        it("should default priceIncludingVat parameter to false", function() {
+            expect(bookie.vatRateOfPrice(100, 10)).to.equal(0.1);
+        });
+
+        it("should return the correct vat rate by price inclusive vat", function() {
+            expect(bookie.vatRateOfPrice(100, 20, true)).to.equal(0.25);
+        });
+    });
+
+    describe("priceOfVat", function() {
+        it("should return the correct price by price exclusive vat", function() {
+            expect(bookie.priceOfVat(25, 0.25, false)).to.equal(100);
+        });
+
+        it("should default priceIncludingVat parameter to false", function() {
+            expect(bookie.priceOfVat(10, 0.1)).to.equal(100);
+        });
+
+        it("should return the correct price by price inclusive vat", function() {
+            expect(bookie.priceOfVat(20, 0.25, true)).to.equal(100);
+            expect(bookie.priceOfVat(10, 0.1, true)).to.equal(110);
+        });
+    });
+
     describe("Book", function() {
         it("should have constructor defined", function() {
             expect(bookie.Book).to.be.a("function");
