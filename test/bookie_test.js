@@ -3,21 +3,29 @@
 "use strict";
 
 function makeTransactions(book) {
-    book.createVerification("2012-02-11", "Domain names").credit(2010, 188).debit(2640, 37.6).debit(6500, 150.4);
-    book.createVerification("2012-03-04", "Paper holders").credit(2010, 29).debit(2640, 5.8).debit(6100, 23.2);
-    book.createVerification("2012-03-09", "Office stuff").credit(2010, 31).debit(2640, 6.2).debit(6100, 24.8);
-    book.createVerification("2012-03-09", "Post stamps").credit(2010, 18).debit(2640, 3.6).debit(6100, 14.4);
-    book.createVerification("2012-03-24", "iPad").credit(2020, 7195).debit(2640, 1439).debit(5400, 5756);
+    var verifications = [];
+
+    verifications.push(book.createVerification("2012-02-11", "Domain names").credit(2010, 188).debit(2640, 37.6).debit(6500, 150.4));
+    verifications.push(book.createVerification("2012-03-04", "Paper holders").credit(2010, 29).debit(2640, 5.8).debit(6100, 23.2));
+    verifications.push(book.createVerification("2012-03-09", "Office stuff").credit(2010, 31).debit(2640, 6.2).debit(6100, 24.8));
+    verifications.push(book.createVerification("2012-03-09", "Post stamps").credit(2010, 18).debit(2640, 3.6).debit(6100, 14.4));
+    verifications.push(book.createVerification("2012-03-24", "iPad").credit(2020, 7195).debit(2640, 1439).debit(5400, 5756));
+
+    return verifications;
 }
 
 function makeAccounts(book) {
-    book.createAccount(1930, "Bank");
-    book.createAccount(2010, "Own capital John Doe");
-    book.createAccount(2020, "Own capital Jane Doe");
-    book.createAccount(2640, "Incoming VAT 25 %");
-    book.createAccount(5400, "Usage inventory");
-    book.createAccount(6100, "Office material");
-    book.createAccount(6500, "External services");
+    var accounts = [];
+
+    accounts.push(book.createAccount(1930, "Bank"));
+    accounts.push(book.createAccount(2010, "Own capital John Doe"));
+    accounts.push(book.createAccount(2020, "Own capital Jane Doe"));
+    accounts.push(book.createAccount(2640, "Incoming VAT 25 %"));
+    accounts.push(book.createAccount(5400, "Usage inventory"));
+    accounts.push(book.createAccount(6100, "Office material"));
+    accounts.push(book.createAccount(6500, "External services"));
+
+    return accounts;
 }
 
 describe("bookie.js", function() {
@@ -30,22 +38,40 @@ describe("bookie.js", function() {
             expect(bookie.round).to.be.a("function");
         });
 
-        it("should round numbers to the set decimals of roundDecimals", function() {
+        it("should round numbers to the set decimals", function() {
             expect(bookie.round(19.3141)).to.equal(19.31);
             expect(bookie.round(15.5)).to.equal(15.5);
             expect(bookie.round(15.555)).to.equal(15.56);
             expect(bookie.round(0.001)).to.equal(0);
 
-            bookie.roundDecimals = 1;
             expect(bookie.round(19.3141, 1)).to.equal(19.3);
             expect(bookie.round(15.5, 1)).to.equal(15.5);
             expect(bookie.round(15.555, 1)).to.equal(15.6);
             expect(bookie.round(0.001, 1)).to.equal(0);
+
+            expect(bookie.round(19.3141, 0)).to.equal(19);
+            expect(bookie.round(15.5, 0)).to.equal(16);
+            expect(bookie.round(15.555, 0)).to.equal(16);
+            expect(bookie.round(0.001, 0)).to.equal(0);
         });
 
         it("should be able to round really big numbers", function() {
             expect(bookie.round(1031313124120102401204102412401204102.121241512, 3)).to.equal(1031313124120102401204102412401204102.121);
             expect(bookie.round(1031313124120102401204102412401204114124124125125151251251202.1399, 3)).to.equal(1031313124120102401204102412401204114124124125125151251251202.14);
+        });
+
+        it("should throw on invalid arguments", function() {
+            expect(function() {
+                bookie.round(true);
+            }).to.throw(Error);
+
+            expect(function() {
+                bookie.round(new Date());
+            }).to.throw(Error);
+
+            expect(function() {
+                bookie.round(13, 13.37);
+            }).to.throw(Error);
         });
     });
 
@@ -82,13 +108,46 @@ describe("bookie.js", function() {
         });
     });
 
+    describe("insideDates", function() {
+        it("should be defined", function() {
+            expect(bookie.insideDates).to.be.a("function");
+        });
+
+        it("should return true for dates inside range", function() {
+            expect(bookie.insideDates(bookie.parseDate("2014-02-01"), "2012-01-01", "2014-02-02")).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2014-02-02"), "2012-01-01", "2014-02-02")).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2012-01-01"), "2012-01-01", "2014-02-02")).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2014-02-03"), "2012-01-01", "2014-02-02")).to.equal(false);
+            expect(bookie.insideDates(bookie.parseDate("2011-12-30"), "2012-01-01", "2014-02-02")).to.equal(false);
+
+            expect(bookie.insideDates(bookie.parseDate("2014-12-20"), "2014-12-20", "2014-12-20")).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2014-12-21"), "2014-12-20", "2014-12-20")).to.equal(false);
+            expect(bookie.insideDates(bookie.parseDate("2014-12-19"), "2014-12-20", "2014-12-20")).to.equal(false);
+        });
+
+        it("should be able to skip from and to arguments", function() {
+            expect(bookie.insideDates(bookie.parseDate("2014-12-20"), "2014-12-20")).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2014-12-21"), "2014-12-20")).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2015-12-21"), "2014-12-20")).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2014-11-21"), "2014-12-20")).to.equal(false);
+
+            expect(bookie.insideDates(bookie.parseDate("2014-12-20"), null, "2014-12-20")).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2010-12-21"), null, "2014-12-20")).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2014-12-21"), null, "2014-12-20")).to.equal(false);
+
+            expect(bookie.insideDates(bookie.parseDate("1912-02-22"))).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2115-12-21"))).to.equal(true);
+            expect(bookie.insideDates(bookie.parseDate("2010-09-03"))).to.equal(true);
+        });
+    });
+
     describe("Book", function() {
         it("should have constructor defined", function() {
             expect(bookie.Book).to.be.a("function");
             expect((new bookie.Book()) instanceof bookie.Book).to.equal(true);
         });
 
-        describe("createVerification", function() {
+        describe("use", function() {
             var book;
 
             beforeEach(function() {
@@ -96,32 +155,85 @@ describe("bookie.js", function() {
             });
 
             it("should be defined", function() {
-                expect(book.createVerification).to.be.a("function");
+                expect(book.use).to.be.a("function");
             });
 
-            it("should create a new Verification instance", function() {
-                var date = new Date();
-                var v = book.createVerification(date, "text");
+            it("should register extensions", function() {
+                var spy = sinon.spy();
 
-                expect(v.book).to.equal(book);
-                expect(v.number).to.equal(1);
-                expect(v.date).to.equal(date);
-                expect(v.text).to.equal("text");
+                var extension = {
+                    name: "test",
+                    apply: spy
+                };
 
-                v = book.createVerification(date, "test");
-                expect(v.book).to.equal(book);
-                expect(v.number).to.equal(2);
-                expect(v.date).to.equal(date);
-                expect(v.text).to.equal("test");
+                book.use(extension);
+
+                expect(spy).to.have.been.calledOnce;
+                expect(spy).to.have.been.calledWith(book);
+                expect(book.extensions["test"]).to.equal(extension);
             });
 
-            it("should accept date strings as date", function() {
-                var v = book.createVerification("2013-01-2", "text");
+            it("should throw on using already applied extension", function() {
+                var spy = sinon.spy();
 
-                expect(v.book).to.equal(book);
-                expect(v.number).to.equal(1);
-                expect(v.date.getTime()).to.equal((new Date("2013-01-02")).getTime());
-                expect(v.text).to.equal("text"); 
+                var extension = {
+                    name: "test",
+                    apply: spy
+                };
+
+                book.use(extension);
+
+                expect(spy).to.have.been.calledOnce;
+
+                expect(function() {
+                    book.use(extension);
+                }).to.throw(Error);
+
+                expect(spy).to.have.been.calledOnce;
+            });
+
+            it("should throw on invalid extension", function() {
+                var spy = sinon.spy();
+
+                expect(function() {
+                    book.use();
+                }).to.throw(Error);
+
+                expect(function() {
+                    book.use(true);
+                }).to.throw(Error);
+
+                expect(function() {
+                    book.use({
+                        foo: "bar"
+                    });
+                }).to.throw(Error);
+
+                expect(function() {
+                    book.use({
+                        name: true,
+                        apply: spy
+                    });
+                }).to.throw(Error);
+                expect(spy).to.not.have.been.called;
+
+                expect(function() {
+                    book.use({
+                        name: "test",
+                        apply: true
+                    });
+                }).to.throw(Error);
+            });
+
+            it("should throw if extension failed to apply", function() {
+                expect(function() {
+                    book.use({
+                        name: "test",
+                        apply: function() {
+                            throw new Error();
+                        }
+                    });
+                }).to.throw(Error);
             });
         });
 
@@ -132,6 +244,74 @@ describe("bookie.js", function() {
                 book = new bookie.Book();
 
                 makeAccounts(book);
+                makeTransactions(book);
+            });
+
+            describe("createVerification", function() {
+                var book;
+
+                beforeEach(function() {
+                    book = new bookie.Book();
+                });
+
+                it("should be defined", function() {
+                    expect(book.createVerification).to.be.a("function");
+                });
+
+                it("should create a new Verification instance", function() {
+                    var date = new Date();
+                    var v = book.createVerification(date, "text");
+
+                    expect(v.book).to.equal(book);
+                    expect(v.number).to.equal(1);
+                    expect(v.date).to.equal(date);
+                    expect(v.text).to.equal("text");
+
+                    v = book.createVerification(date, "test");
+                    expect(v.book).to.equal(book);
+                    expect(v.number).to.equal(2);
+                    expect(v.date).to.equal(date);
+                    expect(v.text).to.equal("test");
+                });
+
+                it("should accept date strings as date", function() {
+                    var v = book.createVerification("2013-01-2", "text");
+
+                    expect(v.book).to.equal(book);
+                    expect(v.number).to.equal(1);
+                    expect(v.date.getTime()).to.equal((new Date("2013-01-02")).getTime());
+                    expect(v.text).to.equal("text"); 
+                });
+            });
+
+            describe("getVerifications", function() {
+                var book;
+                var verifications;
+
+                beforeEach(function() {
+                    book = new bookie.Book();
+                    makeAccounts(book);
+                    verifications = makeTransactions(book);
+                });
+
+                it("should return the verifications between the dates", function() {
+                    expect(book.getVerifications()).to.eql(verifications);
+
+                    function expected(from, to) {
+                        return _.filter(verifications, function(v) {
+                            return bookie.insideDates(v.date, from, to);
+                        });
+                    }
+
+                    function test(from, to) {
+                        expect(book.getVerifications(from, to)).to.eql(expected(from, to));
+                    }
+
+                    test("2012-03-09");
+                    test("2012-03-09", "2012-03-09");
+                    test(null, "2012-03-09");
+                    test("2010-01-01", "2015-01-01");
+                });
             });
 
             it("should be able to transact accounts", function() {
@@ -183,7 +363,7 @@ describe("bookie.js", function() {
                     expect(book.createAccount).to.be.a("function");
                 });
 
-                it("Should create a new Account instance", function() {
+                it("should create a new Account instance", function() {
                     var account = book.createAccount(1337, "test");
                     
                     expect(account.book).to.equal(book);
@@ -191,7 +371,7 @@ describe("bookie.js", function() {
                     expect(account.name).to.equal("test");
                 });
 
-                it("Should not be able to create mutliple accounts with same number", function() {
+                it("should not be able to create mutliple accounts with same number", function() {
                     book.createAccount(1337, "test");
 
                     expect(function() {
@@ -205,9 +385,23 @@ describe("bookie.js", function() {
                     expect(book.getAccount).to.be.a("function");
                 });
 
-                it("Should return accounts by number", function() {
+                it("should return accounts by number", function() {
                     expect(book.createAccount(1337, "test")).to.equal(book.getAccount(1337));
                     expect(book.getAccount(9999)).to.equal(null);
+                });
+
+                it("should throw error on invalid arguments", function() {
+                    expect(function() {
+                        book.getAccount(true);
+                    }).to.throw(Error);
+
+                    expect(function() {
+                        book.getAccount(new Date());
+                    }).to.throw(Error);
+
+                    expect(function() {
+                        book.getAccount("adwadawd");
+                    }).to.throw(Error);
                 });
             });
 
@@ -298,6 +492,20 @@ describe("bookie.js", function() {
 
                     expect(book.classifiers.balance).to.have.length(2);
                     expect(book.classifiers.balance[1]()).to.equal(1337);
+                });
+
+                it("should throw on invalid arguments", function() {
+                    expect(function() {
+                        book.addClassifier(1311, function() {});
+                    }).to.throw(Error);
+
+                    expect(function() {
+                        book.addClassifier(true, function() {});
+                    }).to.throw(Error);
+
+                    expect(function() {
+                        book.addClassifier("test", true);
+                    }).to.throw(Error);
                 });
             });
 

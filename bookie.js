@@ -172,7 +172,7 @@ var Book = _dereq_("./book.js");
 exports.Book = Book;
 exports.parseDate = utils.parseDate;
 exports.round = utils.round;
-
+exports.insideDates = utils.insideDates;
 },{"./book.js":2,"./utils.js":4}],4:[function(_dereq_,module,exports){
 "use strict";
 
@@ -214,10 +214,6 @@ function round(number, decimals) {
         exp = +exp;
         number = +number;
 
-        if(!number) {
-            throw new Error("Invalid number.");
-        }
-
         if(!exp) {
             return Math.round(number);
         }
@@ -235,19 +231,32 @@ function round(number, decimals) {
         return +(number[0] + "e" + (number[1] ? (+number[1] + exp) : exp));
     }
 
-    var d = decimals || 2;
-
-    if(!_.isNumber(d)) {
-        throw new Error("Invalid decimals.");
+    if(!_.isNumber(number)) {
+        throw new Error("Invalid number.");
     }
+
+    var d = _.isNumber(decimals) ? decimals : 2;
 
     return _round(number, -d);
 }
 
 function insideDates(date, from, to) {
+    date = parseDate(date);
+
+    function parseIfDefined(value) {
+        if(value && _.isDate(value)) {
+            return value;
+        }
+
+        return value ? parseDate(value) : value;
+    }
+
     if(!_.isDate(date)) {
         throw new Error("Invalid date.");
     }
+
+    from = parseIfDefined(from);
+    to = parseIfDefined(to);
 
     return (!from || date.getTime() >= from.getTime()) && (!to || date.getTime() <= to.getTime());
 }

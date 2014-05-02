@@ -25,7 +25,7 @@ module.exports = function(grunt) {
             node: {
                 options: {
                     reporter: "spec",
-                    require: ["test/setup-mocha.js"]
+                    require: ["test/support/coverage/blanket.js", "test/setup-mocha.js"]
                 },
                 src: "test/bookie_test.js"
             },
@@ -51,7 +51,7 @@ module.exports = function(grunt) {
     grunt.registerTask("test:node", ["mochaTest:node"]);
     grunt.registerTask("test:browser", ["build", "karma:client"]);
 
-    grunt.registerTask("coverage", ["mochaTest:coverage"]);
+    grunt.registerTask("coverage", ["mochaTest"]);
 
     grunt.registerTask("test", ["jshint", "test:node", "test:browser", "coverage"]);
 
