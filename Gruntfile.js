@@ -62,7 +62,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask("coverage", ["mochaTest"]);
 
-    grunt.registerTask("test", ["jshint", "test:node", "test:browser", "coverage"]);
+    grunt.registerTask("test", ["jshint", "test:node", "test:browser"]);
 
     grunt.registerTask("default", ["test"]);
 };
