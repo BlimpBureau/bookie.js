@@ -379,7 +379,7 @@ describe("bookie.js", function() {
             it("should be able to validate credit and debit balance", function() {
                 makeTransactions(book);
 
-                book.verifications.forEach(function(v) {
+                _.forEach(book.verifications, function(v) {
                     expect(v.isBalancedCreditDebit(), "V. nr: " + v.number).to.equal(true);
                 });
             });
