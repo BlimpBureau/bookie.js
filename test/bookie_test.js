@@ -34,6 +34,10 @@ describe("bookie.js", function() {
         expect(bookie).to.be.a("object");
     });
 
+    it("should have version property defined", function() {
+        expect(bookie.version).to.equal("v0.0.0");
+    });
+
     describe("round", function() {
         it("should be defined and have roundDecimals in place", function() {
             expect(bookie.round).to.be.a("function");
@@ -106,6 +110,20 @@ describe("bookie.js", function() {
             expect(bookie.parseDate(1337)).to.equal(null);
             expect(bookie.parseDate(true)).to.equal(null);
             expect(bookie.parseDate(1.1)).to.equal(null);
+        });
+    });
+
+    describe("dateToString", function() {
+        it("should be defined", function() {
+            expect(bookie.dateToString).to.be.a("function");
+        });
+
+        it("should convert a date to a string", function() {
+            expect(bookie.dateToString(bookie.parseDate("2012-03-10"))).to.equal("2012-03-10");
+            expect(bookie.dateToString(bookie.parseDate("1991-1-05"))).to.equal("1991-01-05");
+            expect(bookie.dateToString(bookie.parseDate("2012-4-1"))).to.equal("2012-04-01");
+            expect(bookie.dateToString(bookie.parseDate("1991-12-31"))).to.equal("1991-12-31");
+            expect(bookie.dateToString(bookie.parseDate("1991-1-1"))).to.equal("1991-01-01");
         });
     });
 
@@ -318,6 +336,27 @@ describe("bookie.js", function() {
                     expect(v.number).to.equal(1);
                     expect(v.date.getTime()).to.equal((new Date("2013-01-02")).getTime());
                     expect(v.text).to.equal("text"); 
+                });
+            });
+
+            describe("getVerification", function() {
+                var book;
+                var verifications;
+
+                beforeEach(function() {
+                    book = new bookie.Book();
+                    makeAccounts(book);
+                    verifications = makeTransactions(book);
+                });
+
+                it("should be defined", function() {
+                    expect(book.getVerification).to.be.a("function");
+                });
+
+                it("should return a verification", function() {
+                    for(var i = 0; i < verifications.length; i++) {
+                        expect(book.getVerification(i+1)).to.eql(verifications[i]);
+                    }
                 });
             });
 
@@ -578,6 +617,235 @@ describe("bookie.js", function() {
                     book.getAccount(6100),
                     book.getAccount(6500)
                 ]);
+            });
+        });
+    });
+
+    describe("Exporting", function() {
+        describe("exportAccount", function() {
+            var book;
+
+            beforeEach(function() {
+                book = new bookie.Book();
+                makeAccounts(book);
+                makeTransactions(book);
+            });
+
+            it("should be defined", function() {
+                expect(bookie.exportAccount).to.be.a("function");
+            });
+
+            it("should export an account", function() {
+                var object;
+
+                object = bookie.exportAccount(book.getAccount(1930));
+
+                expect(object).to.be.an("object");
+                expect(object._format).to.equal("bookie.account");
+                expect(object._version).to.equal(bookie.version);
+                expect(object.number).to.equal(1930);
+                expect(object.name).to.equal("Bank");
+                expect(object.debits).to.eql([]);
+                expect(object.credits).to.eql([]);
+
+                object = bookie.exportAccount(book.getAccount(2010));
+
+                expect(object).to.be.an("object");
+                expect(object._format).to.equal("bookie.account");
+                expect(object._version).to.equal(bookie.version);
+                expect(object.number).to.equal(2010);
+                expect(object.name).to.equal("Own capital John Doe");
+                expect(object.debits).to.eql([]);
+                expect(object.credits).to.eql([
+                    {
+                        verification: 1,
+                        amount: 188
+                    },
+                    {
+                        verification: 2,
+                        amount: 29
+                    },
+                    {
+                        verification: 3,
+                        amount: 31
+                    }, 
+                    {
+                        verification: 4,
+                        amount: 18
+                    }
+                ]);
+
+                object = bookie.exportAccount(book.getAccount(5400), true);
+
+                expect(object).to.be.an("object");
+                expect(object._format).to.be.an("undefined");
+                expect(object._version).to.be.an("undefined");
+                expect(object.number).to.equal(5400);
+                expect(object.name).to.equal("Usage inventory");
+                expect(object.debits).to.eql([
+                    {
+                        verification: 5,
+                        amount: 5756
+                    }
+                ]);
+                expect(object.credits).to.eql([]);
+            });
+        });
+
+        describe("exportVerification", function() {
+            var book;
+
+            beforeEach(function() {
+                book = new bookie.Book();
+                makeAccounts(book);
+                makeTransactions(book);
+            });
+
+            it("should be defined", function() {
+                expect(bookie.exportVerification).to.be.a("function");
+            });
+
+            it("should export a verification", function() {
+                var object;
+
+                object = bookie.exportVerification(book.getVerification(1));
+
+                expect(object).to.be.an("object");
+                expect(object._format).to.equal("bookie.verification");
+                expect(object._version).to.equal(bookie.version);
+                expect(object.number).to.equal(1);
+                expect(object.date).to.equal("2012-02-11");
+                expect(object.text).to.equal("Domain names");
+                expect(object.debits).to.eql([
+                    {
+                        account: 2640,
+                        amount: 37.6
+                    },
+                    {
+                        account: 6500,
+                        amount: 150.4
+                    }
+                ]);
+                expect(object.credits).to.eql([
+                    {
+                        account: 2010,
+                        amount: 188
+                    }
+                ]);
+
+                object = bookie.exportVerification(book.getVerification(5));
+
+                expect(object).to.be.an("object");
+                expect(object._format).to.equal("bookie.verification");
+                expect(object._version).to.equal(bookie.version);
+                expect(object.number).to.equal(5);
+                expect(object.date).to.equal("2012-03-24");
+                expect(object.text).to.equal("iPad");
+                expect(object.debits).to.eql([
+                    {
+                        account: 2640,
+                        amount: 1439
+                    },
+                    {
+                        account: 5400,
+                        amount: 5756
+                    }
+                ]);
+                expect(object.credits).to.eql([
+                    {
+                        account: 2020,
+                        amount: 7195
+                    }
+                ]);
+
+                object = bookie.exportVerification(book.getVerification(3), true);
+
+                expect(object).to.be.an("object");
+                expect(object._format).to.equal(undefined);
+                expect(object._version).to.equal(undefined);
+                expect(object.number).to.equal(3);
+                expect(object.date).to.equal("2012-03-09");
+                expect(object.text).to.equal("Office stuff");
+                expect(object.debits).to.eql([
+                    {
+                        account: 2640,
+                        amount: 6.2
+                    },
+                    {
+                        account: 6100,
+                        amount: 24.8
+                    }
+                ]);
+                expect(object.credits).to.eql([
+                    {
+                        account: 2010,
+                        amount: 31
+                    }
+                ]);
+            });
+        });
+
+        describe("exportBook", function() {
+            var book;
+
+            beforeEach(function() {
+                book = new bookie.Book();
+                makeAccounts(book);
+                makeTransactions(book);
+            });
+
+            it("should be defined", function() {
+                expect(bookie.exportBook).to.be.a("function");
+            });
+
+            it("should export a book", function() {
+                var accounts = _.map(book.getAccounts(), function(account) {
+                    return bookie.exportAccount(account, true);
+                });
+
+                var verifications = _.map(book.getVerifications(), function(verification) {
+                    return bookie.exportVerification(verification, true);
+                });
+
+                var object;
+
+                object = bookie.exportBook(book);
+
+                expect(object).to.be.an("object");
+                expect(object._format).to.equal("bookie.book");
+                expect(object._version).to.equal(bookie.version);
+                expect(object.accounts).to.eql(accounts);
+                expect(object.verifications).to.eql(verifications);
+                expect(object.extensions).to.eql([]);
+
+
+                object = bookie.exportBook(book, true);
+
+                expect(object).to.be.an("object");
+                expect(object._format).to.equal(undefined);
+                expect(object._version).to.equal(undefined);
+                expect(object.accounts).to.eql(accounts);
+                expect(object.verifications).to.eql(verifications);
+                expect(object.extensions).to.eql([]);
+
+                book
+                .use({
+                    name: "extension-test",
+                    apply: function() {}
+                })
+                .use({
+                    name: "test åäö",
+                    apply: function() {}
+                });
+
+                object = bookie.exportBook(book);
+
+                expect(object).to.be.an("object");
+                expect(object._format).to.equal("bookie.book");
+                expect(object._version).to.equal(bookie.version);
+                expect(object.accounts).to.eql(accounts);
+                expect(object.verifications).to.eql(verifications);
+                expect(object.extensions).to.eql(["extension-test", "test åäö"]);
             });
         });
     });
