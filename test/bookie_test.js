@@ -848,5 +848,30 @@ describe("bookie.js", function() {
                 expect(object.extensions).to.eql(["extension-test", "test åäö"]);
             });
         });
+
+        describe("export", function() {
+            var book;
+
+            beforeEach(function() {
+                book = new bookie.Book();
+                makeAccounts(book);
+                makeTransactions(book);
+            });
+
+            it("should be defined", function() {
+                expect(bookie.export).to.be.a("function");
+            });
+
+            it("should be smart and export objects by instance type", function() {
+                var account = book.getAccount(6100);
+                debugger;
+                expect(bookie.export(account)).to.eql(bookie.exportAccount(account));
+
+                var verification = book.getVerification(3);
+                expect(bookie.export(verification)).to.eql(bookie.exportVerification(verification));
+
+                expect(bookie.export(book)).to.eql(bookie.exportBook(book));
+            });
+        });
     });
 });
