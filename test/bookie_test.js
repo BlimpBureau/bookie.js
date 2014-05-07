@@ -864,13 +864,37 @@ describe("bookie.js", function() {
 
             it("should be smart and export objects by instance type", function() {
                 var account = book.getAccount(6100);
-                debugger;
                 expect(bookie.export(account)).to.eql(bookie.exportAccount(account));
 
                 var verification = book.getVerification(3);
                 expect(bookie.export(verification)).to.eql(bookie.exportVerification(verification));
 
                 expect(bookie.export(book)).to.eql(bookie.exportBook(book));
+            });
+        });
+    });
+
+    describe("Importing", function() {
+        describe("importBook", function() {
+            var book;
+
+            beforeEach(function() {
+                book = new bookie.Book();
+                makeAccounts(book);
+                makeTransactions(book);
+            });
+
+            it("should be defined", function() {
+                expect(bookie.importBook).to.be.a("function");
+            });
+
+            it("should import exported data", function() {
+                var data = bookie.export(book);
+
+                var b = new bookie.Book();
+                bookie.importBook(b, data);
+
+                expect(b).to.eql(book);
             });
         });
     });
