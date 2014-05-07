@@ -896,6 +896,16 @@ describe("bookie.js", function() {
 
                 expect(b).to.eql(book);
             });
+
+            it("should be okay with existing accounts if matching", function() {
+                var data = bookie.export(book);
+
+                var b = new bookie.Book();
+                makeAccounts(b);
+                bookie.importBook(b, data);
+
+                expect(b).to.eql(book);
+            });
         });
     });
 });
