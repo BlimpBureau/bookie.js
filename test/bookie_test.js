@@ -337,6 +337,25 @@ describe("bookie.js", function() {
                     expect(v.date.getTime()).to.equal((new Date("2013-01-02")).getTime());
                     expect(v.text).to.equal("text"); 
                 });
+
+                it("should call extension methods when creating", function() {
+                    var spy = sinon.spy();
+
+                    book.use({
+                        name: "test with no method",
+                        apply: function() {}
+                    })
+                    .use({
+                        name: "test with method",
+                        apply: function() {},
+                        createVerification: spy
+                    });
+
+                    var v = book.createVerification("2012-01-02", "test", { test: "hello" }, true);
+
+                    expect(spy).to.have.been.calledOnce;
+                    expect(spy).to.have.been.calledWith(v, { test: "hello" }, true);
+                });
             });
 
             describe("getVerification", function() {
