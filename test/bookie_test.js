@@ -872,6 +872,22 @@ describe("bookie.js", function() {
                 expect(bookie.export(book)).to.eql(bookie.exportBook(book));
             });
         });
+
+        it("export and import methods should also be present in objects", function() {
+            var book = new bookie.Book();
+            makeAccounts(book);
+            makeTransactions(book);
+
+
+            function test(arg) {
+                expect(book.getAccount(2640).export(arg)).to.eql(bookie.export(book.getAccount(2640), arg));
+                expect(book.getVerification(3).export(arg)).to.eql(bookie.export(book.getVerification(3), arg));
+                expect(book.export(arg)).to.eql(bookie.export(book, arg));
+            }
+
+            test();
+            test(true);
+        });
     });
 
     describe("Importing", function() {
