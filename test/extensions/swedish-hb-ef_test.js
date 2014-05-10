@@ -199,9 +199,5 @@ describe("SwedishHBEF", function() {
                 "Jane": 7210.6
             });
         });
-
-        it("should calculate the own capital by owner share correctly", function() {
-
-        });
     });
 });

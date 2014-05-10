@@ -568,6 +568,30 @@ describe("bookie.js", function() {
                 expect(book.getAccount(6500).sumDebit("2011-1-1", "2015-1-1")).to.equal(150.4);
                 expect(book.getAccount(6500).sumCredit()).to.equal(0);
             });
+
+            it("should be able to sum transactions by custom filter", function() {
+                expect(book.getAccount(2010).sumDebit("2012-02-11")).to.equal(0);
+                expect(book.getAccount(2010).sumCredit("2012-03-09", null, function() {
+                    return 1337;
+                })).to.equal(1337*2);
+
+                expect(book.getAccount(2020).sumDebit()).to.equal(0);
+                expect(book.getAccount(2020).sumCredit(null, "2012-03-24", function(verification) {
+                    return (verification.amount % 2 === 0) ? verification.amount : 0;
+                })).to.equal(0);
+
+                expect(book.getAccount(2640).sumDebit("2012-03-04", "2012-03-09")).to.equal(15.6);
+                expect(book.getAccount(2640).sumCredit()).to.equal(0);
+
+                expect(book.getAccount(5400).sumDebit("2014-01-01")).to.equal(0);
+                expect(book.getAccount(5400).sumCredit()).to.equal(0);
+
+                expect(book.getAccount(6100).sumDebit("2012-03-04", "2012-03-04")).to.equal(23.2);
+                expect(book.getAccount(6100).sumCredit()).to.equal(0);
+
+                expect(book.getAccount(6500).sumDebit("2011-1-1", "2015-1-1")).to.equal(150.4);
+                expect(book.getAccount(6500).sumCredit()).to.equal(0);
+            });
         });
 
         describe("Classifying", function() {
