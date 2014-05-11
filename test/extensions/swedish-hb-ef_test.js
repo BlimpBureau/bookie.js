@@ -136,6 +136,52 @@ describe("SwedishHBEF", function() {
             expect(result.incomes).to.equal(0);
             expect(result.expenses).to.equal(5968.8);
             expect(result.result).to.equal(-5968.8);
+            expect(result.resultShare).to.eql({
+                "John": -5968.8/2,
+                "Jane": -5968.8/2
+            });
+        });
+
+        it("should calculate owner result share correctly", function() {
+            expect(book.result().resultShare).to.eql({
+                "John": 0,
+                "Jane": 0
+            });
+
+            book.createVerification("2012-02-11", "Domain names", [0.2, 0.8]).credit(2010, 188).debit(2640, 37.6).debit(6500, 150.4);
+
+            expect(book.result().resultShare).to.eql({
+                "John": -30.08,
+                "Jane": -120.32
+            });
+
+            book.createVerification("2012-03-04", "Paper holders", [1, 0]).credit(2010, 29).debit(2640, 5.8).debit(6100, 23.2);
+
+            expect(book.result().resultShare).to.eql({
+                "John": -30.08 -23.2,
+                "Jane": -120.32
+            });
+
+            book.createVerification("2012-03-09", "Office stuff", [0, 1]).credit(2010, 31).debit(2640, 6.2).debit(6100, 24.8);
+
+            expect(book.result().resultShare).to.eql({
+                "John": -30.08 -23.2,
+                "Jane": -120.32 -24.8
+            });
+
+            book.createVerification("2012-03-09", "Post stamps", [0.23, 0.77]).credit(2010, 18).debit(2640, 3.6).debit(6100, 14.4);
+
+            expect(book.result().resultShare).to.eql({
+                "John": -30.08 -23.2 -3.31,
+                "Jane": -120.32 -24.8 -11.09
+            });
+
+            book.createVerification("2012-03-24", "iPad", [0, 1]).credit(2020, 7195).debit(2640, 1439).debit(5400, 5756);
+
+            expect(book.result().resultShare).to.eql({
+                "John": -30.08 -23.2 -3.31,
+                "Jane": -120.32 -24.8 -11.09 -5756
+            });
         });
     });
 
