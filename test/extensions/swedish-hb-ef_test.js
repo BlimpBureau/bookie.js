@@ -15,6 +15,15 @@ function makeTransactions(book) {
     return verifications;
 }
 
+function makeOwnerShareTransactions(book) {
+    book.createVerification("2012-02-11", "Domain names").credit(2010, 188).debit(2640, 37.6).debit(6500, 150.4);
+    book.createVerification("2012-03-04", "Paper holders").credit(2010, 29).debit(2640, 5.8).debit(6100, 23.2);
+    book.createVerification("2012-03-09", "Office stuff").credit(2010, 31).debit(2640, 6.2).debit(6100, 24.8);
+    book.createVerification("2012-03-09", "Post stamps").credit(2010, 18).debit(2640, 3.6).debit(6100, 14.4);
+    book.createVerification("2012-03-24", "iPad", [0, 1]).credit(2020, 7195).debit(2640, 1439).debit(5400, 5756);
+    book.createVerification("2012-10-04", "Sold product", [0, 1]).debit(1930, 7500).credit(2610, 1500).credit(3000, 6000);    
+}
+
 describe("SwedishHBEF", function() {
     it("should be defined", function() {
         expect(bookieSwedishHBEF).to.be.a("function");
@@ -182,6 +191,19 @@ describe("SwedishHBEF", function() {
                 "John": -30.08 -23.2 -3.31,
                 "Jane": -120.32 -24.8 -11.09 -5756
             });
+
+            book = new bookie.Book();
+            book.use(bookieSwedishHBEF({
+                owners: [{ name: "John" }, { name: "Jane" }]
+            }));
+
+            makeOwnerShareTransactions(book);
+
+            expect(book.result().result).to.eql(31.2);
+            expect(book.result().resultShare).to.eql({
+                "John": -212.8/2,
+                "Jane": bookie.round(-212.8/2 -5756 + 6000)
+            });
         });
     });
 
@@ -207,11 +229,20 @@ describe("SwedishHBEF", function() {
             expect(balance.to).to.equal(undefined);
             expect(balance.assets).to.equal(0);
             expect(balance.debts).to.equal(0);
-            expect(balance.ownCapital).to.equal(0);
+            expect(balance.ownCapital).to.eql({
+                ingoing: 0,
+                outgoing: 0
+            });
             expect(balance.valid).to.equal(true);
             expect(balance.ownCapitalShare).to.eql({
-                "John": 0,
-                "Jane": 0
+                "John": {
+                    ingoing: 0,
+                    outgoing: 0
+                },
+                "Jane": {
+                    ingoing: 0,
+                    outgoing: 0
+                }
             });
 
             makeTransactions(book);
@@ -223,11 +254,20 @@ describe("SwedishHBEF", function() {
             expect(balance.to).to.equal(undefined);
             expect(balance.assets).to.equal(0);
             expect(balance.debts).to.equal(-1492.2);
-            expect(balance.ownCapital).to.equal(1492.2);
+            expect(balance.ownCapital).to.eql({
+                ingoing: 0,
+                outgoing: 1492.2
+            });
             expect(balance.valid).to.equal(true);
             expect(balance.ownCapitalShare).to.eql({
-                "John": -2718.4,
-                "Jane": 4210.6
+                "John": {
+                    ingoing: 0,
+                    outgoing: -2718.4,
+                },
+                "Jane": {
+                    ingoing: 0,
+                    outgoing: 4210.6
+                }
             });
 
             book.createVerification("2012-10-04", "Sold product").debit(1930, 7500).credit(2610, 1500).credit(3000, 6000);
@@ -238,11 +278,46 @@ describe("SwedishHBEF", function() {
             expect(balance.to).to.equal(undefined);
             expect(balance.assets).to.equal(7500);
             expect(balance.debts).to.equal(7.8);
-            expect(balance.ownCapital).to.equal(7492.20);
+            expect(balance.ownCapital).to.eql({
+                ingoing: 0,
+                outgoing: 7492.20
+            });
             expect(balance.valid).to.equal(true);
             expect(balance.ownCapitalShare).to.eql({
-                "John": 281.6,
-                "Jane": 7210.6
+                "John": {
+                    ingoing: 0,
+                    outgoing: 281.6,
+                },
+                "Jane": {
+                    ingoing: 0,
+                    outgoing: 7210.6
+                }
+            });
+        });
+
+        it("should calculate right own capital when owners have different shares of result and expenses", function() {
+            makeOwnerShareTransactions(book);
+
+            var balance = book.balance();
+            expect(balance).to.be.an("object");
+            expect(balance.from).to.equal(undefined);
+            expect(balance.to).to.equal(undefined);
+            expect(balance.assets).to.equal(7500);
+            expect(balance.debts).to.equal(7.8);
+            expect(balance.ownCapital).to.eql({
+                ingoing: 0,
+                outgoing: 7492.20
+            });
+            expect(balance.valid).to.equal(true);
+            expect(balance.ownCapitalShare).to.eql({
+                "John": {
+                    ingoing: 0,
+                    outgoing: 159.6,
+                },
+                "Jane": {
+                    ingoing: 0,
+                    outgoing: 7332.6
+                }
             });
         });
     });
