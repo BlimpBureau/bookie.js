@@ -409,6 +409,30 @@ describe("bookie.js", function() {
                 });
             });
 
+            describe("touches", function() {
+                var book;
+                var verifications;
+
+                beforeEach(function() {
+                    book = new bookie.Book();
+                    makeAccounts(book);
+                    verifications = makeTransactions(book);
+                });
+
+                it("should be defined", function() {
+                    expect(verifications[0].touches).to.be.a("function");
+                });
+
+                it("should return true for the accounts that the verification touches", function() {
+                    expect(verifications[0].touches(1930)).to.equal(false);
+                    expect(verifications[0].touches(2010)).to.equal(true);
+                    expect(verifications[0].touches(2020)).to.equal(false);
+                    expect(verifications[0].touches(2640)).to.equal(true);
+                    expect(verifications[0].touches(book.getAccount(2645))).to.equal(false);
+                    expect(verifications[0].touches(book.getAccount(6500))).to.equal(true);
+                });
+            });
+
             it("should be able to transact accounts", function() {
                 var v = book.createVerification("2012-02-11", "Domain names");
                 v.credit(2010, 188);
