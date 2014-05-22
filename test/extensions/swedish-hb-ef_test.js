@@ -24,6 +24,12 @@ function makeOwnerShareTransactions(book) {
     book.createVerification("2012-10-04", "Sold product", [0, 1]).debit(1930, 7500).credit(2610, 1500).credit(3000, 6000);    
 }
 
+function makeOwnerShareTransactionsWithEndOfFiscalYear(book) {
+    makeOwnerShareTransactions(book);
+    book.createVerification("2012-12-31", "Result of year 2012").credit(2010, 15.60).credit(2020, 15.60).debit(8999, 31.2);
+    book.createVerification("2012-12-31", "Zero out VAT").debit(2610, 1500).credit(2640, 1492.2).credit(2650, 7.8);
+}
+
 describe("SwedishHBEF", function() {
     it("should be defined", function() {
         expect(bookieSwedishHBEF).to.be.a("function");
@@ -341,6 +347,32 @@ describe("SwedishHBEF", function() {
 
         it("should calculate right own capital when owners have different shares of result and expenses", function() {
             makeOwnerShareTransactions(book);
+
+            var balance = book.balance();
+            expect(balance).to.be.an("object");
+            expect(balance.from).to.equal(undefined);
+            expect(balance.to).to.equal(undefined);
+            expect(balance.assets).to.equal(7500);
+            expect(balance.debts).to.equal(7.8);
+            expect(balance.ownCapital).to.eql({
+                ingoing: 0,
+                outgoing: 7492.20
+            });
+            expect(balance.valid).to.equal(true);
+            expect(balance.ownCapitalShare).to.eql({
+                "John": {
+                    ingoing: 0,
+                    outgoing: 159.6,
+                },
+                "Jane": {
+                    ingoing: 0,
+                    outgoing: 7332.6
+                }
+            });
+        });
+
+        it("should be able to handle when an end of fiscal year has been made (ending transactions present)", function() {
+            makeOwnerShareTransactionsWithEndOfFiscalYear(book);
 
             var balance = book.balance();
             expect(balance).to.be.an("object");
