@@ -292,6 +292,69 @@ describe("bookie.js", function() {
             });
         });
 
+        describe("FiscalYears", function() {
+            var book;
+
+            beforeEach(function() {
+                book = new bookie.Book();
+            });
+
+            it("container should be present in book", function() {
+                expect(book.fiscalYears).to.be.an("array");
+                expect(book.fiscalYears.length).to.equal(0);
+            });
+
+            describe("createFiscalYear", function() {
+                var book;
+
+                beforeEach(function() {
+                    book = new bookie.Book();
+                });
+
+                it("should be defined", function() {
+                    expect(book.createFiscalYear).to.be.a("function");
+                });
+
+                it("should create fiscal years", function() {
+                    book.createFiscalYear("2012-01-01", "2012-12-31");
+                    expect(book.fiscalYears.length).to.equal(1);
+                    expect(bookie.dateToString(book.fiscalYears[0].from)).to.equal("2012-01-01");
+                    expect(bookie.dateToString(book.fiscalYears[0].to)).to.equal("2012-12-31");
+
+                    book.createFiscalYear(bookie.parseDate("2011-01-01"), "2011-12-31");
+                    expect(book.fiscalYears.length).to.equal(2);
+                    expect(bookie.dateToString(book.fiscalYears[0].from)).to.equal("2011-01-01");
+                    expect(bookie.dateToString(book.fiscalYears[0].to)).to.equal("2011-12-31");
+
+                    book.createFiscalYear("2009-06-01", "2010-12-31");
+                    expect(book.fiscalYears.length).to.equal(3);
+                    expect(bookie.dateToString(book.fiscalYears[0].from)).to.equal("2009-06-01");
+                    expect(bookie.dateToString(book.fiscalYears[0].to)).to.equal("2010-12-31");
+
+                    expect(bookie.dateToString(book.fiscalYears[0].from)).to.equal("2009-06-01");
+                    expect(bookie.dateToString(book.fiscalYears[0].to)).to.equal("2010-12-31");
+                    expect(bookie.dateToString(book.fiscalYears[1].from)).to.equal("2011-01-01");
+                    expect(bookie.dateToString(book.fiscalYears[1].to)).to.equal("2011-12-31");
+                    expect(bookie.dateToString(book.fiscalYears[2].from)).to.equal("2012-01-01");
+                    expect(bookie.dateToString(book.fiscalYears[2].to)).to.equal("2012-12-31");
+
+                    expect(function() {
+                        book.createFiscalYear("2010-01-01", "2010-12-31");
+                    }).to.throw(Error);
+
+                    expect(function() {
+                        book.createFiscalYear("2013-01-02", "2013-12-31");
+                    }).to.throw(Error);
+
+                    expect(function() {
+                        book.createVerification("", 133);
+                    }).to.throw(Error);
+
+
+                });
+            });
+        });
+
         describe("Verifications", function() {
             var book;
 
