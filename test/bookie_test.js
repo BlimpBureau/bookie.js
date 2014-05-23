@@ -349,8 +349,43 @@ describe("bookie.js", function() {
                     expect(function() {
                         book.createVerification("", 133);
                     }).to.throw(Error);
+                });
+            });
 
+            describe("getFiscalYear", function() {
+                var book;
 
+                beforeEach(function() {
+                    book = new bookie.Book();
+
+                    book.createFiscalYear("2009-06-01", "2010-12-31");
+                    book.createFiscalYear("2011-01-01", "2011-12-31");
+                    book.createFiscalYear("2012-01-01", "2012-12-31");
+                });
+
+                it("should be defined", function() {
+                    expect(book.getFiscalYear).to.be.a("function");
+                });
+
+                it("should return the fiscal years right by selector", function() {
+                    function test(selector, fiscalYearNumber) {
+                        var fy = book.getFiscalYear(selector);
+
+                        if(fiscalYearNumber !== null) {
+                            expect(fy).to.eql(book.fiscalYears[fiscalYearNumber-1]);
+                        } else {
+                            expect(fy).to.equal(null);
+                        }
+                    }
+
+                    test("2012-01-01", 3);
+                    test("2012-04-12", 3);
+                    test(bookie.parseDate("2010-01-02"), 1);
+                    test("2013-01-01", null);
+                    test("2011-11-02", 2);
+                    test("2011-12-31", 2);
+                    test("2009-06-02", 1);
+                    test("2010-12-31", 1);
                 });
             });
         });
