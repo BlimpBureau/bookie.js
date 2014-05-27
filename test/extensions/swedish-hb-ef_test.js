@@ -221,6 +221,7 @@ describe("SwedishHBEF", function() {
             book.use(bookieSwedishHBEF({
                 owners: [{ name: "John" }, { name: "Jane" }]
             }));
+            book.createFiscalYear("2012-01-01", "2012-12-31");
         });
 
         it("should have been applied to book", function() {
@@ -231,8 +232,7 @@ describe("SwedishHBEF", function() {
             var balance = book.balance();
 
             expect(balance).to.be.an("object");
-            expect(balance.from).to.equal(undefined);
-            expect(balance.to).to.equal(undefined);
+            expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(0);
             expect(balance.debts).to.equal(0);
             expect(balance.ownCapital).to.eql({
@@ -256,8 +256,7 @@ describe("SwedishHBEF", function() {
             balance = book.balance();
 
             expect(balance).to.be.an("object");
-            expect(balance.from).to.equal(undefined);
-            expect(balance.to).to.equal(undefined);
+            expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(0);
             expect(balance.debts).to.equal(-1492.2);
             expect(balance.ownCapital).to.eql({
@@ -280,29 +279,6 @@ describe("SwedishHBEF", function() {
 
             balance = book.balance();
             expect(balance).to.be.an("object");
-            expect(balance.from).to.equal(undefined);
-            expect(balance.to).to.equal(undefined);
-            expect(balance.assets).to.equal(7500);
-            expect(balance.debts).to.equal(7.8);
-            expect(balance.ownCapital).to.eql({
-                ingoing: 0,
-                outgoing: 7492.20
-            });
-            expect(balance.valid).to.equal(true);
-            expect(balance.ownCapitalShare).to.eql({
-                "John": {
-                    ingoing: 0,
-                    outgoing: 281.6,
-                },
-                "Jane": {
-                    ingoing: 0,
-                    outgoing: 7210.6
-                }
-            });
-
-            balance = book.balance("2012-01-01", "2012-12-31");
-            expect(balance).to.be.an("object");
-            expect(balance.from).to.equal("2012-01-01");
             expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(7500);
             expect(balance.debts).to.equal(7.8);
@@ -322,9 +298,29 @@ describe("SwedishHBEF", function() {
                 }
             });
 
-            balance = book.balance(null, bookie.parseDate("2012-12-31"));
+            balance = book.balance("2012-12-31");
             expect(balance).to.be.an("object");
-            expect(balance.from).to.equal(undefined);
+            expect(balance.to).to.equal("2012-12-31");
+            expect(balance.assets).to.equal(7500);
+            expect(balance.debts).to.equal(7.8);
+            expect(balance.ownCapital).to.eql({
+                ingoing: 0,
+                outgoing: 7492.20
+            });
+            expect(balance.valid).to.equal(true);
+            expect(balance.ownCapitalShare).to.eql({
+                "John": {
+                    ingoing: 0,
+                    outgoing: 281.6,
+                },
+                "Jane": {
+                    ingoing: 0,
+                    outgoing: 7210.6
+                }
+            });
+
+            balance = book.balance(bookie.parseDate("2012-12-31"));
+            expect(balance).to.be.an("object");
             expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(7500);
             expect(balance.debts).to.equal(7.8);
@@ -350,8 +346,7 @@ describe("SwedishHBEF", function() {
 
             var balance = book.balance();
             expect(balance).to.be.an("object");
-            expect(balance.from).to.equal(undefined);
-            expect(balance.to).to.equal(undefined);
+            expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(7500);
             expect(balance.debts).to.equal(7.8);
             expect(balance.ownCapital).to.eql({
@@ -376,8 +371,7 @@ describe("SwedishHBEF", function() {
 
             var balance = book.balance();
             expect(balance).to.be.an("object");
-            expect(balance.from).to.equal(undefined);
-            expect(balance.to).to.equal(undefined);
+            expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(7500);
             expect(balance.debts).to.equal(7.8);
             expect(balance.ownCapital).to.eql({
@@ -388,11 +382,11 @@ describe("SwedishHBEF", function() {
             expect(balance.ownCapitalShare).to.eql({
                 "John": {
                     ingoing: 0,
-                    outgoing: 159.6,
+                    outgoing: 281.6,
                 },
                 "Jane": {
                     ingoing: 0,
-                    outgoing: 7332.6
+                    outgoing: 7210.6
                 }
             });
         });
