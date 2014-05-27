@@ -113,6 +113,21 @@ describe("bookie.js", function() {
         });
     });
 
+    describe("isDatesEqual", function() {
+        it("should be defined", function() {
+            expect(bookie.isDatesEqual).to.be.a("function");
+        });
+
+        it("should work as expected", function() {
+            expect(bookie.isDatesEqual("2012-01-02", "2012-01-02")).to.equal(true);
+            expect(bookie.isDatesEqual("2012-01-02", "2012-01-03")).to.equal(false);
+            expect(bookie.isDatesEqual(bookie.parseDate("2012-01-02"), "2012-01-02")).to.equal(true);
+            expect(bookie.isDatesEqual(bookie.parseDate("2012-01-02"), bookie.parseDate("2012-01-02"))).to.equal(true);
+            expect(bookie.isDatesEqual(bookie.parseDate("2012-01-03"), "2012-01-02")).to.equal(false);
+            expect(bookie.isDatesEqual(bookie.parseDate("2012-01-02"), bookie.parseDate("2012-02-02"))).to.equal(false);
+        });
+    });
+
     describe("dateToString", function() {
         it("should be defined", function() {
             expect(bookie.dateToString).to.be.a("function");
@@ -350,6 +365,25 @@ describe("bookie.js", function() {
                         book.createVerification("", 133);
                     }).to.throw(Error);
                 });
+
+                it("should apply extensions", function() {
+                    var spy = sinon.spy();
+
+                    book.use({
+                        name: "test with no method",
+                        apply: function() {}
+                    })
+                    .use({
+                        name: "test with method",
+                        apply: function() {},
+                        createFiscalYear: spy
+                    });
+
+                    var fy = book.createFiscalYear("2012-01-01", "2012-12-31", { test: "hello" }, true);
+
+                    expect(spy).to.have.been.calledOnce;
+                    expect(spy).to.have.been.calledWith(fy, { test: "hello" }, true);
+                });
             });
 
             describe("getFiscalYear", function() {
@@ -386,6 +420,26 @@ describe("bookie.js", function() {
                     test("2011-12-31", 2);
                     test("2009-06-02", 1);
                     test("2010-12-31", 1);
+                });
+            });
+
+            describe("getLastFiscalYear", function() {
+                it("should be defined", function() {
+                    var book = new bookie.Book();
+                    expect(book.getLastFiscalYear).to.be.a("function");
+                });
+
+                it("should return the last fiscal year", function() {
+                    var book = new bookie.Book();
+                    book.createFiscalYear("2009-06-01", "2010-12-31");
+                    book.createFiscalYear("2011-01-01", "2011-12-31");
+                    var last = book.createFiscalYear("2012-01-01", "2012-12-31");
+
+                    expect(book.getLastFiscalYear()).to.eql(last);
+
+                    book = new bookie.Book();
+
+                    expect(book.getLastFiscalYear()).to.equal(null);
                 });
             });
         });
