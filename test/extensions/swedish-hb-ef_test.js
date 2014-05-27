@@ -229,7 +229,7 @@ describe("SwedishHBEF", function() {
         });
 
         it("should return a balance object", function() {
-            var balance = book.balance();
+            var balance = book.balance("2012-12-31");
 
             expect(balance).to.be.an("object");
             expect(balance.to).to.equal("2012-12-31");
@@ -250,10 +250,18 @@ describe("SwedishHBEF", function() {
                     outgoing: 0
                 }
             });
+        });
 
+        it("should be able to handle different dates and default to last fiscal year if no date", function() {
+            expect(book.balance("2012-11-03").to).to.equal("2012-11-03");
+            expect(book.balance(bookie.parseDate("2012-01-01")).to).to.equal("2012-01-01");
+            expect(book.balance().to).to.equal("2012-12-31");
+        });
+
+        it("should calculate own capital of owners", function() {
             makeTransactions(book);
 
-            balance = book.balance();
+            var balance = book.balance();
 
             expect(balance).to.be.an("object");
             expect(balance.to).to.equal("2012-12-31");
@@ -278,48 +286,6 @@ describe("SwedishHBEF", function() {
             book.createVerification("2012-10-04", "Sold product").debit(1930, 7500).credit(2610, 1500).credit(3000, 6000);
 
             balance = book.balance();
-            expect(balance).to.be.an("object");
-            expect(balance.to).to.equal("2012-12-31");
-            expect(balance.assets).to.equal(7500);
-            expect(balance.debts).to.equal(7.8);
-            expect(balance.ownCapital).to.eql({
-                ingoing: 0,
-                outgoing: 7492.20
-            });
-            expect(balance.valid).to.equal(true);
-            expect(balance.ownCapitalShare).to.eql({
-                "John": {
-                    ingoing: 0,
-                    outgoing: 281.6,
-                },
-                "Jane": {
-                    ingoing: 0,
-                    outgoing: 7210.6
-                }
-            });
-
-            balance = book.balance("2012-12-31");
-            expect(balance).to.be.an("object");
-            expect(balance.to).to.equal("2012-12-31");
-            expect(balance.assets).to.equal(7500);
-            expect(balance.debts).to.equal(7.8);
-            expect(balance.ownCapital).to.eql({
-                ingoing: 0,
-                outgoing: 7492.20
-            });
-            expect(balance.valid).to.equal(true);
-            expect(balance.ownCapitalShare).to.eql({
-                "John": {
-                    ingoing: 0,
-                    outgoing: 281.6,
-                },
-                "Jane": {
-                    ingoing: 0,
-                    outgoing: 7210.6
-                }
-            });
-
-            balance = book.balance(bookie.parseDate("2012-12-31"));
             expect(balance).to.be.an("object");
             expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(7500);
