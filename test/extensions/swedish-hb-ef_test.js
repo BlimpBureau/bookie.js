@@ -30,6 +30,21 @@ function makeOwnerShareTransactionsWithEndOfFiscalYear(book) {
     book.createVerification("2012-12-31", "Zero out VAT").debit(2610, 1500).credit(2640, 1492.2).credit(2650, 7.8);
 }
 
+function make2013(book) {
+    book.createFiscalYear("2013-01-01", "2013-12-31");
+
+    book.createVerification("2013-01-21", "Domain names").credit(2010, 188).debit(2640, 37.6).debit(6500, 150.4);
+    book.createVerification("2013-01-30", "Bank cards").credit(1930, 250).debit(6570, 250);
+    book.createVerification("2013-02-06", "Own withdrawal Jane").credit(1930, 500).debit(2020, 500);
+    book.createVerification("2013-02-06", "Own withdrawal Jane").credit(1930, 6500).debit(2020, 6500);
+    book.createVerification("2013-02-18", "Customer number 2").debit(1930, 3750).credit(2610, 750).credit(3000, 3000);
+    book.createVerification("2013-04-15", "Yearly bank cost").credit(1930, 1200).debit(6570, 1200);
+    book.createVerification("2013-10-17", "Customer number 3", [0, 1]).debit(1930, 1000).credit(2610, 200).credit(3000, 800);
+    book.createVerification("2013-12-09", "RAM memory", [0, 1]).credit(1930, 1449).debit(2640, 289.8).debit(5400, 1159.2);
+    book.createVerification("2013-12-17", "SSD-kit", [0, 1]).credit(1930, 402.89).credit(2615, 100.72).debit(2645, 100.72).debit(4056, 402.89);
+    book.createVerification("2013-12-27", "iPhone 5s", [1, 0]).credit(2010, 6795).debit(2640, 1359).debit(5400, 5436);
+}
+
 describe("SwedishHBEF", function() {
     it("should be defined", function() {
         expect(bookieSwedishHBEF).to.be.a("function");
@@ -211,6 +226,34 @@ describe("SwedishHBEF", function() {
                 "Jane": bookie.round(-212.8/2 -5756 + 6000)
             });
         });
+
+        it("should handle results of different fiscal years", function() {
+            makeOwnerShareTransactionsWithEndOfFiscalYear(book);
+            make2013(book);
+
+            var result = book.result("2013-01-01", "2013-01-01");
+
+            expect(result.result).to.equal(0);
+            expect(result.resultShare).to.eql({
+                "John": 0,
+                "Jane": 0
+            });
+
+            result = book.result("2013-01-01", "2013-12-31");
+
+            expect(result.result).to.equal(-4798.49);
+            expect(result.resultShare).to.eql({
+                "John": -4736.2,
+                "Jane": -62.29
+            });
+
+            result = book.result("2012-01-01", "2013-12-31");
+            expect(result.result).to.equal(-4767.29);
+            expect(result.resultShare).to.eql({
+                "John": -4842.6,
+                "Jane": 75.31
+            });
+        });
     });
 
     describe("balance", function() {
@@ -314,7 +357,7 @@ describe("SwedishHBEF", function() {
 
         it("should calculate incoming balances from previous fiscal years right", function() {
             makeOwnerShareTransactionsWithEndOfFiscalYear(book);
-            book.createFiscalYear("2013-01-01", "2013-12-31");
+            make2013(book);
 
             var balance = book.balance("2013-01-01");
 
@@ -326,6 +369,19 @@ describe("SwedishHBEF", function() {
             expect(balance.ownCapitalShare).to.eql({
                 "John": 281.6,
                 "Jane": 7210.6
+            });
+            expect(balance.valid).to.equal(true);
+
+            balance = book.balance("2013-12-31");
+
+            expect(balance).to.be.an("object");
+            expect(balance.to).to.equal("2013-12-31");
+            expect(balance.assets).to.equal(1948.11);
+            expect(balance.debts).to.equal(-728.6);
+            expect(balance.ownCapital).to.eql(2676.71);
+            expect(balance.ownCapitalShare).to.eql({
+                "John": 2528.4,
+                "Jane": 148.31
             });
             expect(balance.valid).to.equal(true);
         });
