@@ -385,5 +385,49 @@ describe("SwedishHBEF", function() {
             });
             expect(balance.valid).to.equal(true);
         });
+
+        it("should override ended fiscal years when fairness is enforced", function() {
+            makeOwnerShareTransactionsWithEndOfFiscalYear(book);
+            make2013(book);
+
+            var balance = book.balance("2012-12-31", true);
+
+            expect(balance).to.be.an("object");
+            expect(balance.to).to.equal("2012-12-31");
+            expect(balance.assets).to.equal(7500);
+            expect(balance.debts).to.equal(7.8);
+            expect(balance.ownCapital).to.eql(7492.20);
+            expect(balance.ownCapitalShare).to.eql({
+                "John": 159.6,
+                "Jane": 7332.6
+            });
+            expect(balance.valid).to.equal(true);
+
+            balance = book.balance("2013-01-01", true);
+
+            expect(balance).to.be.an("object");
+            expect(balance.to).to.equal("2013-01-01");
+            expect(balance.assets).to.equal(7500);
+            expect(balance.debts).to.equal(7.8);
+            expect(balance.ownCapital).to.eql(7492.20);
+            expect(balance.ownCapitalShare).to.eql({
+                "John": 159.6,
+                "Jane": 7332.6
+            });
+            expect(balance.valid).to.equal(true);
+
+            balance = book.balance("2013-12-31", true);
+
+            expect(balance).to.be.an("object");
+            expect(balance.to).to.equal("2013-12-31");
+            expect(balance.assets).to.equal(1948.11);
+            expect(balance.debts).to.equal(-728.6);
+            expect(balance.ownCapital).to.eql(2676.71);
+            expect(balance.ownCapitalShare).to.eql({
+                "John": 2406.4,
+                "Jane": 270.31
+            });
+            expect(balance.valid).to.equal(true);
+        });
     });
 });
