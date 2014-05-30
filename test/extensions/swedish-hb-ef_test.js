@@ -235,20 +235,11 @@ describe("SwedishHBEF", function() {
             expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(0);
             expect(balance.debts).to.equal(0);
-            expect(balance.ownCapital).to.eql({
-                ingoing: 0,
-                outgoing: 0
-            });
+            expect(balance.ownCapital).to.eql(0);
             expect(balance.valid).to.equal(true);
             expect(balance.ownCapitalShare).to.eql({
-                "John": {
-                    ingoing: 0,
-                    outgoing: 0
-                },
-                "Jane": {
-                    ingoing: 0,
-                    outgoing: 0
-                }
+                "John": 0,
+                "Jane": 0
             });
         });
 
@@ -267,20 +258,11 @@ describe("SwedishHBEF", function() {
             expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(0);
             expect(balance.debts).to.equal(-1492.2);
-            expect(balance.ownCapital).to.eql({
-                ingoing: 0,
-                outgoing: 1492.2
-            });
+            expect(balance.ownCapital).to.eql(1492.2);
             expect(balance.valid).to.equal(true);
             expect(balance.ownCapitalShare).to.eql({
-                "John": {
-                    ingoing: 0,
-                    outgoing: -2718.4,
-                },
-                "Jane": {
-                    ingoing: 0,
-                    outgoing: 4210.6
-                }
+                "John": -2718.4,
+                "Jane": 4210.6
             });
 
             book.createVerification("2012-10-04", "Sold product").debit(1930, 7500).credit(2610, 1500).credit(3000, 6000);
@@ -290,20 +272,11 @@ describe("SwedishHBEF", function() {
             expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(7500);
             expect(balance.debts).to.equal(7.8);
-            expect(balance.ownCapital).to.eql({
-                ingoing: 0,
-                outgoing: 7492.20
-            });
+            expect(balance.ownCapital).to.eql(7492.20);
             expect(balance.valid).to.equal(true);
             expect(balance.ownCapitalShare).to.eql({
-                "John": {
-                    ingoing: 0,
-                    outgoing: 281.6,
-                },
-                "Jane": {
-                    ingoing: 0,
-                    outgoing: 7210.6
-                }
+                "John": 281.6,
+                "Jane": 7210.6
             });
         });
 
@@ -315,20 +288,11 @@ describe("SwedishHBEF", function() {
             expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(7500);
             expect(balance.debts).to.equal(7.8);
-            expect(balance.ownCapital).to.eql({
-                ingoing: 0,
-                outgoing: 7492.20
-            });
+            expect(balance.ownCapital).to.eql(7492.20);
             expect(balance.valid).to.equal(true);
             expect(balance.ownCapitalShare).to.eql({
-                "John": {
-                    ingoing: 0,
-                    outgoing: 159.6,
-                },
-                "Jane": {
-                    ingoing: 0,
-                    outgoing: 7332.6
-                }
+                "John": 159.6,
+                "Jane": 7332.6
             });
         });
 
@@ -340,21 +304,30 @@ describe("SwedishHBEF", function() {
             expect(balance.to).to.equal("2012-12-31");
             expect(balance.assets).to.equal(7500);
             expect(balance.debts).to.equal(7.8);
-            expect(balance.ownCapital).to.eql({
-                ingoing: 0,
-                outgoing: 7492.20
-            });
+            expect(balance.ownCapital).to.eql(7492.20);
             expect(balance.valid).to.equal(true);
             expect(balance.ownCapitalShare).to.eql({
-                "John": {
-                    ingoing: 0,
-                    outgoing: 281.6,
-                },
-                "Jane": {
-                    ingoing: 0,
-                    outgoing: 7210.6
-                }
+                "John": 281.6,
+                "Jane": 7210.6
             });
+        });
+
+        it("should calculate incoming balances from previous fiscal years right", function() {
+            makeOwnerShareTransactionsWithEndOfFiscalYear(book);
+            book.createFiscalYear("2013-01-01", "2013-12-31");
+
+            var balance = book.balance("2013-01-01");
+
+            expect(balance).to.be.an("object");
+            expect(balance.to).to.equal("2013-01-01");
+            expect(balance.assets).to.equal(7500);
+            expect(balance.debts).to.equal(7.8);
+            expect(balance.ownCapital).to.eql(7492.20);
+            expect(balance.ownCapitalShare).to.eql({
+                "John": 281.6,
+                "Jane": 7210.6
+            });
+            expect(balance.valid).to.equal(true);
         });
     });
 });
