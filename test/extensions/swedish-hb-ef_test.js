@@ -384,6 +384,22 @@ describe("SwedishHBEF", function() {
                 "Jane": 148.31
             });
             expect(balance.valid).to.equal(true);
+
+            book.createVerification("2013-12-31", "Result of 2013").debit(2010, 4798.49).credit(8999, 4798.49);
+            book.createVerification("2013-12-31", "Zero out VAT").debit(2610, 950).debit(2615, 100.72).credit(2640, 1686.4).credit(2645, 100.72).debit(2650, 736.4);
+
+            balance = book.balance("2013-12-31");
+
+            expect(balance).to.be.an("object");
+            expect(balance.to).to.equal("2013-12-31");
+            expect(balance.assets).to.equal(1948.11);
+            expect(balance.debts).to.equal(-728.6);
+            expect(balance.ownCapital).to.eql(2676.71);
+            expect(balance.ownCapitalShare).to.eql({
+                "John": 2466.11,
+                "Jane": 210.6
+            });
+            expect(balance.valid).to.equal(true);
         });
 
         it("should override ended fiscal years when fairness is enforced", function() {
