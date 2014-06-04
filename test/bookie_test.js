@@ -486,7 +486,7 @@ describe("bookie.js", function() {
 
                     expect(v.book).to.equal(book);
                     expect(v.number).to.equal(1);
-                    expect(v.date.getTime()).to.equal((new Date("2013-01-02")).getTime());
+                    expect(bookie.isDatesEqual(v.date, "2013-01-02")).to.equal(true);
                     expect(v.text).to.equal("text"); 
                 });
 
