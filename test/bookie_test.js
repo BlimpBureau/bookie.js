@@ -307,6 +307,38 @@ describe("bookie.js", function() {
             });
         });
 
+        describe("using", function() {
+            it("should be defined", function() {
+                var book = new bookie.Book();
+
+                expect(book.using).to.be.a("function");
+            });
+
+            it("return boolean indicating using of a extension name", function() {
+                var book = new bookie.Book();
+
+                expect(book.using("")).to.equal(false);
+                expect(book.using("test")).to.equal(false);
+
+                book.use({
+                    name: "test",
+                    apply: _.noop
+                });
+
+                expect(book.using("test")).to.equal(true);
+                expect(book.using("test2")).to.equal(false);
+
+                book.use({
+                    name: "test2",
+                    apply: _.noop
+                });
+
+                expect(book.using("test")).to.equal(true);
+                expect(book.using("test2")).to.equal(true);
+                expect(book.using("")).to.equal(false);
+            });
+        });
+
         describe("FiscalYears", function() {
             var book;
 
@@ -420,6 +452,9 @@ describe("bookie.js", function() {
                     test("2011-12-31", 2);
                     test("2009-06-02", 1);
                     test("2010-12-31", 1);
+
+                    test(1, 1);
+                    test(3, 3);
                 });
             });
 
@@ -1092,7 +1127,7 @@ describe("bookie.js", function() {
             });
         });
 
-        it("export and import methods should also be present in objects", function() {
+        it("export methods should also be present in objects", function() {
             var book = new bookie.Book();
             makeAccounts(book);
             makeTransactions(book);
@@ -1140,6 +1175,15 @@ describe("bookie.js", function() {
                 bookie.importBook(b, data);
 
                 expect(b).to.eql(book);
+            });
+
+            it("should also be present as import method in Book", function() {
+                var data = book.export();
+
+                var b = new bookie.Book();
+                var b2 = new bookie.Book();
+
+                expect(b.import(data)).to.eql(bookie.importBook(b2, data));
             });
         });
     });
