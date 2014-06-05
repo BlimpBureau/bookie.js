@@ -37,14 +37,14 @@ module.exports = function(grunt) {
 
     var config = {
         jshint: {
-            all: ["lib/**/*.js", "test/**/*.js", "Gruntfile.js"],
+            all: ["src/**/*.js", "test/**/*.js", "Gruntfile.js"],
             options: {
                 jshintrc: true
             }
         },
         browserify: {
             bookie: {
-                src: ["lib/bookie.js"],
+                src: ["src/bookie.js"],
                 dest: "build/bookie.js",
                 options: {
                     bundleOptions: {
@@ -53,7 +53,7 @@ module.exports = function(grunt) {
                 }
             },
             bookieSwedishHBEF: {
-                src: "lib/extensions/swedish-hb-ef.js",
+                src: "src/extensions/swedish-hb-ef.js",
                 dest: "build/bookie-swedish-hb-ef.js",
                 options: {
                     bundleOptions: {
