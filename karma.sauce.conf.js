@@ -1,3 +1,5 @@
+/* global process:false */
+
 "use strict";
 
 var sharedConfig = require("./karma.conf.js");
@@ -89,8 +91,6 @@ module.exports = function(config) {
     config.set({
         autoWatch: false,
 
-        transports: ["xhr-polling"],
-
         reporters: ["dots", "saucelabs"],
 
           // If browser does not capture in given timeout [ms], kill it
@@ -99,7 +99,8 @@ module.exports = function(config) {
         sauceLabs: {
             testName: "bookie.js",
             recordScreenshots: false,
-            startConnect: false
+            startConnect: false,
+            tunnelIdentifier: process.env.SAUCE_TUNNEL_ID
         },
 
         customLaunchers: customLaunchers,

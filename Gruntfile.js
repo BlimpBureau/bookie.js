@@ -1,3 +1,5 @@
+/* global process:false */
+
 "use strict";
 
 function registerSauceBrowsers(config, sauceBrowsers, configFile) {
@@ -15,11 +17,9 @@ function registerSauceBrowsers(config, sauceBrowsers, configFile) {
             var name = "sauce" + capitalize(parts[0]) + capitalize(parts[1]);
 
             var configObject = {
+                configFile: configFile,
                 options: {
-                    configFile: configFile,
-                    options: {
-                        browsers: sauceBrowsers[key]
-                    }
+                    browsers: sauceBrowsers[key]
                 }
             };
 
@@ -93,6 +93,14 @@ module.exports = function(grunt) {
                     browsers: ["Chrome", "Safari", "Firefox"]
                 }
             }
+        },
+        "sauce_connect": {
+            options: {
+                username: process.env.SAUCE_USERNAME,
+                accessKey: process.env.SAUCE_ACCESS_KEY,
+                tunnelIdentifier: process.env.SAUCE_TUNNEL_ID
+            },
+            tunnel: {}
         }
     };
 
@@ -108,6 +116,9 @@ module.exports = function(grunt) {
 
     grunt.initConfig(config);
 
+    grunt.registerTask("sauceConnect:start", ["checkSauceConnectEnv", "sauce_connect"]);
+    grunt.registerTask("sauceConnect:stop", ["sauce-connect-close"]);
+
     grunt.registerTask("build", ["browserify"]);
 
     grunt.registerTask("test:node", ["mochaTest:node"]);
@@ -119,7 +130,26 @@ module.exports = function(grunt) {
     grunt.registerTask("test:style", ["jshint", "jscs"]);
 
     grunt.registerTask("test", ["test:style", "test:node", "build", "karma:local"]);
-    grunt.registerTask("test:full", ["test:style", "test:node", "build", "karma:local", "karma:sauce"]);
+    grunt.registerTask("test:full", ["test:style", "test:node", "build", "karma:local", "test:sauce"]);
+
+    grunt.registerTask("ci", ["jshint", "jscs", "build", "test:node", "sauceConnect:start", "test:sauce", "sauceConnect:stop"]);
 
     grunt.registerTask("default", ["test"]);
+
+    grunt.registerTask("checkSauceConnectEnv", "Checks so all env variables are set for sauce connect.", function() {
+        if(!process.env.SAUCE_USERNAME) {
+            grunt.log.error("env SAUCE_USERNAME needs to be set.");
+            return false;
+        }
+
+        if(!process.env.SAUCE_ACCESS_KEY) {
+            grunt.log.error("env SAUCE_ACCESS_KEY needs to be set.");
+            return false;
+        }
+
+        if(!process.env.SAUCE_TUNNEL_ID) {
+            grunt.log.writeln("SAUCE_TUNNEL_ID not set, defaulting to \"bookie.js sauce tunnel\"");
+            process.env.SAUCE_TUNNEL_ID = "bookie.js sauce tunnel";
+        }
+    });
 };
