@@ -1,109 +1,108 @@
+"use strict";
+
 var sharedConfig = require("./karma.conf.js");
 
 module.exports = function(config) {
-  sharedConfig(config);
+    sharedConfig(config);
 
-  // define SL browsers
-  var customLaunchers = {
+    // define SL browsers
+    var customLaunchers = {
+        "SL_CHROME_LATEST_OSX": {
+            base: "SauceLabs",
+            platform: "Mac 10.9",
+            browserName: "chrome",
+            version: "34"
+        },
+        "SL_CHROME_LATEST_WINDOWS": {
+            base: "SauceLabs",
+            platform: "Windows 8.1",
+            browserName: "chrome",
+            version: "35"
+        },
+        "SL_CHROME_LATEST_LINUX": {
+            base: "SauceLabs",
+            platform: "Linux",
+            browserName: "chrome",
+            version: "35"
+        },
 
-    //Chrome
+        //Firefox
 
-    "SL_CHROME_LATEST_OSX": {
-      base: "SauceLabs",
-      platform: "Mac 10.9",
-      browserName: "chrome",
-      version: "34"
-    },
-    "SL_CHROME_LATEST_WINDOWS": {
-      base: "SauceLabs",
-      platform: "Windows 8.1",
-      browserName: "chrome",
-      version: "35"
-    },
-    "SL_CHROME_LATEST_LINUX": {
-      base: "SauceLabs",
-      platform: "Linux",
-      browserName: "chrome",
-      version: "35"
-    },
+        "SL_FIREFOX_LATEST_OSX": {
+            base: "SauceLabs",
+            platform: "Mac 10.9",
+            browserName: "firefox",
+            version: "28"
+        },
+        "SL_FIREFOX_LATEST_WINDOWS": {
+            base: "SauceLabs",
+            platform: "Windows 8.1",
+            browserName: "firefox",
+            version: "29"
+        },
+        "SL_FIREFOX_LATEST_LINUX": {
+            base: "SauceLabs",
+            platform: "Linux",
+            browserName: "firefox",
+            version: "29"
+        },
 
-    //Firefox
+        //Safari
 
-    "SL_FIREFOX_LATEST_OSX": {
-      base: "SauceLabs",
-      platform: "Mac 10.9",
-      browserName: "firefox",
-      version: "28"
-    },
-    "SL_FIREFOX_LATEST_WINDOWS": {
-      base: "SauceLabs",
-      platform: "Windows 8.1",
-      browserName: "firefox",
-      version: "29"
-    },
-    "SL_FIREFOX_LATEST_LINUX": {
-      base: "SauceLabs",
-      platform: "Linux",
-      browserName: "firefox",
-      version: "29"
-    },
+        "SL_SAFARI_LATEST_OSX": {
+            base: "SauceLabs",
+            platform: "Mac 10.9",
+            browserName: "safari",
+            version: "7"
+        },
+        "SL_SAFARI_LATEST_WINDOWS": {
+            base: "SauceLabs",
+            platform: "Windows 7",
+            browserName: "safari",
+            version: "5"
+        },
 
-    //Safari
+        //IE
 
-    "SL_SAFARI_LATEST_OSX": {
-      base: "SauceLabs",
-      platform: "Mac 10.9",
-      browserName: "safari",
-      version: "7"
-    },
-    "SL_SAFARI_LATEST_WINDOWS": {
-      base: "SauceLabs",
-      platform: "Windows 7",
-      browserName: "safari",
-      version: "5"
-    },
+        "SL_IE_LATEST_WINDOWS": {
+            base: "SauceLabs",
+            platform: "Windows 8.1",
+            browserName: "internet explorer",
+            version: "11"
+        },
 
-    //IE
+            //Opera
+        "SL_OPERA_LATEST_WINDOWS": {
+            base: "SauceLabs",
+            platform: "Windows 7",
+            browserName: "opera",
+            version: "12"
+        },
+        "SL_OPERA_LATEST_LINUX": {
+            base: "SauceLabs",
+            platform: "Linux",
+            browserName: "opera",
+            version: "12"
+        }
+    };
 
-    "SL_IE_LATEST_WINDOWS": {
-      base: "SauceLabs",
-      platform: "Windows 8.1",
-      browserName: "internet explorer",
-      version: "11"
-    },
+    config.set({
+        autoWatch: false,
 
-    //Opera
-    "SL_OPERA_LATEST_WINDOWS": {
-      base: "SauceLabs",
-      platform: "Windows 7",
-      browserName: "opera",
-      version: "12"
-    },
-    "SL_OPERA_LATEST_LINUX": {
-      base: "SauceLabs",
-      platform: "Linux",
-      browserName: "opera",
-      version: "12"
-    }
-  };
+        transports: ["xhr-polling"],
 
-  config.set({
-    autoWatch: false,
+        reporters: ["dots", "saucelabs"],
 
-    transports: ["xhr-polling"],
+          // If browser does not capture in given timeout [ms], kill it
+        captureTimeout: 120000,
 
-    reporters: ["dots", "saucelabs"],
+        sauceLabs: {
+            testName: "bookie.js",
+            recordScreenshots: false,
+            startConnect: false
+        },
 
-    // If browser does not capture in given timeout [ms], kill it
-    captureTimeout: 120000,
-
-    sauceLabs: {
-      testName: "bookie.js",
-      recordScreenshots: false,
-      startConnect: false
-    },
-
-    customLaunchers: customLaunchers,
-    singleRun: true
-  });
+        customLaunchers: customLaunchers,
+        singleRun: true
+    });
 };

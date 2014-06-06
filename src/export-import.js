@@ -111,7 +111,7 @@ function exportAccount(bookie, account, skipHeader) {
 
     output.number = account.number;
     output.name = account.name;
-    
+
     output.debits = _.map(account.debits, function(debit) {
         return {
             verification: debit.verification.number,

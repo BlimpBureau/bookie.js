@@ -21,7 +21,7 @@ function makeOwnerShareTransactions(book) {
     book.createVerification("2012-03-09", "Office stuff").credit(2010, 31).debit(2640, 6.2).debit(6100, 24.8);
     book.createVerification("2012-03-09", "Post stamps").credit(2010, 18).debit(2640, 3.6).debit(6100, 14.4);
     book.createVerification("2012-03-24", "iPad", [0, 1]).credit(2020, 7195).debit(2640, 1439).debit(5400, 5756);
-    book.createVerification("2012-10-04", "Sold product", [0, 1]).debit(1930, 7500).credit(2610, 1500).credit(3000, 6000);    
+    book.createVerification("2012-10-04", "Sold product", [0, 1]).debit(1930, 7500).credit(2610, 1500).credit(3000, 6000);
 }
 
 function makeOwnerShareTransactionsWithEndOfFiscalYear(book) {
@@ -167,8 +167,8 @@ describe("SwedishHBEF", function() {
             expect(result.expenses).to.equal(5968.8);
             expect(result.result).to.equal(-5968.8);
             expect(result.resultShare).to.eql({
-                "John": -5968.8/2,
-                "Jane": -5968.8/2
+                "John": -5968.8 / 2,
+                "Jane": -5968.8 / 2
             });
         });
 
@@ -188,29 +188,29 @@ describe("SwedishHBEF", function() {
             book.createVerification("2012-03-04", "Paper holders", [1, 0]).credit(2010, 29).debit(2640, 5.8).debit(6100, 23.2);
 
             expect(book.result().resultShare).to.eql({
-                "John": -30.08 -23.2,
+                "John": -30.08 - 23.2,
                 "Jane": -120.32
             });
 
             book.createVerification("2012-03-09", "Office stuff", [0, 1]).credit(2010, 31).debit(2640, 6.2).debit(6100, 24.8);
 
             expect(book.result().resultShare).to.eql({
-                "John": -30.08 -23.2,
-                "Jane": -120.32 -24.8
+                "John": -30.08 - 23.2,
+                "Jane": -120.32 - 24.8
             });
 
             book.createVerification("2012-03-09", "Post stamps", [0.23, 0.77]).credit(2010, 18).debit(2640, 3.6).debit(6100, 14.4);
 
             expect(book.result().resultShare).to.eql({
-                "John": -30.08 -23.2 -3.31,
-                "Jane": -120.32 -24.8 -11.09
+                "John": -30.08 - 23.2 - 3.31,
+                "Jane": -120.32 - 24.8 - 11.09
             });
 
             book.createVerification("2012-03-24", "iPad", [0, 1]).credit(2020, 7195).debit(2640, 1439).debit(5400, 5756);
 
             expect(book.result().resultShare).to.eql({
-                "John": -30.08 -23.2 -3.31,
-                "Jane": -120.32 -24.8 -11.09 -5756
+                "John": -30.08 - 23.2 - 3.31,
+                "Jane": -120.32 - 24.8 - 11.09 - 5756
             });
 
             book = new bookie.Book();
@@ -222,8 +222,8 @@ describe("SwedishHBEF", function() {
 
             expect(book.result().result).to.eql(31.2);
             expect(book.result().resultShare).to.eql({
-                "John": -212.8/2,
-                "Jane": bookie.round(-212.8/2 -5756 + 6000)
+                "John": -212.8 / 2,
+                "Jane": bookie.round(-212.8 / 2 - 5756 + 6000)
             });
         });
 

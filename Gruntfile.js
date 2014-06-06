@@ -37,9 +37,15 @@ module.exports = function(grunt) {
 
     var config = {
         jshint: {
-            all: ["src/**/*.js", "test/**/*.js", "Gruntfile.js"],
+            all: ["src/**/*.js", "test/**/*.js", "*.js"],
             options: {
                 jshintrc: true
+            }
+        },
+        jscs: {
+            src: ["src/**/*.js", "test/**/*.js", "*.js", "*.json"],
+            options: {
+                config: ".jscs.json"
             }
         },
         browserify: {
@@ -110,8 +116,10 @@ module.exports = function(grunt) {
 
     grunt.registerTask("coverage", ["mochaTest"]);
 
-    grunt.registerTask("test", ["jshint", "test:node", "build", "karma:local"]);
-    grunt.registerTask("test:full", ["jshint", "test:node", "build", "karma:local", "karma:sauce"]);
+    grunt.registerTask("test:style", ["jshint", "jscs"]);
+
+    grunt.registerTask("test", ["test:style", "test:node", "build", "karma:local"]);
+    grunt.registerTask("test:full", ["test:style", "test:node", "build", "karma:local", "karma:sauce"]);
 
     grunt.registerTask("default", ["test"]);
 };

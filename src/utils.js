@@ -13,48 +13,48 @@ exports.priceOfVat = priceOfVat;
 exports.isAmountsEqual = isAmountsEqual;
 
 function parseDate(date) {
-  if(_.isDate(date)) {
-      return date;
-  }
+    if(_.isDate(date)) {
+        return date;
+    }
 
-  if(!date || !_.isString(date)) {
-      return null;
-  }
+    if(!date || !_.isString(date)) {
+        return null;
+    }
 
-  var parts = date.split("-");
+    var parts = date.split("-");
 
-  if(parts.length !== 3) {
-      return null;
-  }
+    if(parts.length !== 3) {
+        return null;
+    }
 
-  var year = ~~parts[0];
-  var month = ~~parts[1];
-  var day = ~~parts[2];
+    var year = +parts[0];
+    var month = +parts[1];
+    var day = +parts[2];
 
-  if(!year || !month || !day) {
-    throw new Error("Invalid date format.");
-  }
+    if(!year || !month || !day) {
+        throw new Error("Invalid date format.");
+    }
 
-  var d = new Date(Date.UTC(year, month - 1, day));
+    var d = new Date(Date.UTC(year, month - 1, day));
 
-  //Make sure the date has the time 00:00:00.
-  //Since javascript Date will add or subtract hours depending on local timezone, make sure the date gets back to 00:00:00.
-  var userOffset = d.getTimezoneOffset() * 60000; //Hours
-  d.setTime(d.getTime() + userOffset);
+    //Make sure the date has the time 00:00:00.
+    //Since javascript Date will add or subtract hours depending on local timezone, make sure the date gets back to 00:00:00.
+    var userOffset = d.getTimezoneOffset() * 60000; //Hours
+    d.setTime(d.getTime() + userOffset);
 
-  return d;
+    return d;
 }
 
 function dateToString(date) {
-  var d = date.getDate();
-  var m = date.getMonth() + 1;
-  var y = date.getFullYear();
-  
-  return "" + y + "-" + (m <= 9 ? "0" + m : m) + "-" + (d <= 9 ? "0" + d : d);
+    var d = date.getDate();
+    var m = date.getMonth() + 1;
+    var y = date.getFullYear();
+
+    return "" + y + "-" + (m <= 9 ? "0" + m : m) + "-" + (d <= 9 ? "0" + d : d);
 }
 
 function isDatesEqual(date1, date2) {
-    return parseDate(date1).getTime(  ) === parseDate(date2).getTime();
+    return parseDate(date1).getTime() === parseDate(date2).getTime();
 }
 
 function round(number, decimals) {

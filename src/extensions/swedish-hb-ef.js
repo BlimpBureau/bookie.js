@@ -28,7 +28,6 @@ function apply(options, book) {
     options = options || {};
     var owners = options.owners || [];
 
-
     if(owners.length > 4) {
         throw new Error("More than 4 owners currently not supported.");
     }
@@ -113,7 +112,7 @@ function apply(options, book) {
             result = this.result(forceFairness ? null : fiscalYear.from, to);
             ownCapital += result.result;
         }
-        
+
         output.ownCapital = bookie.round(ownCapital);
 
         var valid = bookie.isAmountsEqual(sumAssets, sumDebts + ownCapital);
@@ -208,7 +207,7 @@ function parseOwnersShare(book, ownersObject) {
 function createFiscalYear(fiscalYear) {
     fiscalYear.isEnded = function() {
         var verifications = this.book.getVerifications(this.to, this.to);
-        
+
         return _.find(verifications, function(verification) {
             return verification.touches(8999);
         }) !== undefined;
@@ -274,7 +273,7 @@ function addClassifiers(book, owners) {
 
     var n = 10;
     _.forEach(owners, function(owner) {
-        var type = "ownCapitalOwner" + n/10;
+        var type = "ownCapitalOwner" + n / 10;
         types[type] = types.ownCapital + " " + owner.name;
         book.addClassifier(types[type], between(2000 + n, 2010 + n));
         n += 10;

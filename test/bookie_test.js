@@ -87,7 +87,7 @@ describe("bookie.js", function() {
 
         function validDate(date, year, month, day) {
             expect(date.getDate()).to.equal(day);
-            expect(date.getMonth()).to.equal(month-1);
+            expect(date.getMonth()).to.equal(month - 1);
             expect(date.getFullYear()).to.equal(year);
         }
 
@@ -105,7 +105,7 @@ describe("bookie.js", function() {
         it("should return null if unable to parse date", function() {
             expect(bookie.parseDate()).to.equal(null);
             expect(bookie.parseDate("adwd")).to.equal(null);
-            expect(bookie.parseDate({wat:"sup"})).to.equal(null);
+            expect(bookie.parseDate({ wat:"sup" })).to.equal(null);
             expect(bookie.parseDate(1412)).to.equal(null);
             expect(bookie.parseDate(1337)).to.equal(null);
             expect(bookie.parseDate(true)).to.equal(null);
@@ -438,7 +438,7 @@ describe("bookie.js", function() {
                         var fy = book.getFiscalYear(selector);
 
                         if(fiscalYearNumber !== null) {
-                            expect(fy).to.eql(book.fiscalYears[fiscalYearNumber-1]);
+                            expect(fy).to.eql(book.fiscalYears[fiscalYearNumber - 1]);
                         } else {
                             expect(fy).to.equal(null);
                         }
@@ -522,7 +522,7 @@ describe("bookie.js", function() {
                     expect(v.book).to.equal(book);
                     expect(v.number).to.equal(1);
                     expect(bookie.isDatesEqual(v.date, "2013-01-02")).to.equal(true);
-                    expect(v.text).to.equal("text"); 
+                    expect(v.text).to.equal("text");
                 });
 
                 it("should call extension methods when creating", function() {
@@ -561,7 +561,7 @@ describe("bookie.js", function() {
 
                 it("should return a verification", function() {
                     for(var i = 0; i < verifications.length; i++) {
-                        expect(book.getVerification(i+1)).to.eql(verifications[i]);
+                        expect(book.getVerification(i + 1)).to.eql(verifications[i]);
                     }
                 });
             });
@@ -671,7 +671,7 @@ describe("bookie.js", function() {
 
                 it("should create a new Account instance", function() {
                     var account = book.createAccount(1337, "test");
-                    
+
                     expect(account.book).to.equal(book);
                     expect(account.number).to.equal(1337);
                     expect(account.name).to.equal("test");
@@ -715,7 +715,7 @@ describe("bookie.js", function() {
                 it("should be defined", function() {
                     expect(book.getAccounts).to.be.a("function");
                 });
-                
+
                 // Unsure about this functionality.
                 // it("should return all accounts", function() {
                 //     expect(book.getAccounts()).to.include.members([
@@ -784,7 +784,7 @@ describe("bookie.js", function() {
                 expect(book.getAccount(2010).sumDebit("2012-02-11")).to.equal(0);
                 expect(book.getAccount(2010).sumCredit("2012-03-09", null, function() {
                     return 1337;
-                })).to.equal(1337*2);
+                })).to.equal(1337 * 2);
 
                 expect(book.getAccount(2020).sumDebit()).to.equal(0);
                 expect(book.getAccount(2020).sumCredit(null, "2012-03-24", function(verification) {
@@ -922,7 +922,7 @@ describe("bookie.js", function() {
                     {
                         verification: 3,
                         amount: 31
-                    }, 
+                    },
                     {
                         verification: 4,
                         amount: 18
@@ -1072,7 +1072,6 @@ describe("bookie.js", function() {
                 expect(object.verifications).to.eql(verifications);
                 expect(object.extensions).to.eql([]);
 
-
                 object = bookie.exportBook(book, true);
 
                 expect(object).to.be.an("object");
@@ -1131,7 +1130,6 @@ describe("bookie.js", function() {
             var book = new bookie.Book();
             makeAccounts(book);
             makeTransactions(book);
-
 
             function test(arg) {
                 expect(book.getAccount(2640).export(arg)).to.eql(bookie.export(book.getAccount(2640), arg));
