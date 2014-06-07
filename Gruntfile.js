@@ -36,6 +36,12 @@ module.exports = function(grunt) {
     require("load-grunt-tasks")(grunt);
 
     var config = {
+        pkg: grunt.file.readJSON("package.json"),
+        banner: "/*!\n" +
+                " * bookie.js <%= pkg.version %> (<%= grunt.template.today('yyyy-mm-dd, HH:MM') %>)\n" +
+                " * <%= pkg.homepage %>\n" +
+                " * Licensed under <%= pkg.license %>\n" +
+                " */\n",
         jshint: {
             all: ["src/**/*.js", "test/**/*.js", "*.js"],
             options: {
@@ -43,7 +49,7 @@ module.exports = function(grunt) {
             }
         },
         jscs: {
-            src: ["src/**/*.js", "test/**/*.js", "*.js", "*.json"],
+            src: ["src/**/*.js", "test/**/*.js", "*.js", "*.json", ".jshintrc"],
             options: {
                 config: ".jscs.json"
             }
@@ -101,6 +107,48 @@ module.exports = function(grunt) {
                 tunnelIdentifier: process.env.SAUCE_TUNNEL_ID
             },
             tunnel: {}
+        },
+        "update_json": {
+            bower: {
+                src: "package.json",
+                dest: "bower.json",
+                fields: [
+                    "name",
+                    "version",
+                    "homepage",
+                    "authors",
+                    "description",
+                    "license",
+                    "repository",
+                    "dependencies",
+                    "devDependencies"
+                ]
+            }
+        },
+        copy: {
+            dist: {
+                cwd: "build/",
+                expand: true,
+                src: "**/*",
+                dest: "dist/"
+            }
+        },
+        uglify: {
+            dist: {
+                "dist/bookie.js.min": "dist/bookie.js",
+                "dist/swedish-hb-ef.js": "dist/swedish-hb-ef.js.min"
+            }
+        },
+        usebanner: {
+            dist: {
+                options: {
+                    position: "top",
+                    banner: "<%= banner %>"
+                },
+                files: {
+                    src: "dist/**/*"
+                }
+            }
         }
     };
 
@@ -120,10 +168,11 @@ module.exports = function(grunt) {
     grunt.registerTask("sauceConnect:stop", ["sauce-connect-close"]);
 
     grunt.registerTask("build", ["browserify"]);
+    grunt.registerTask("dist", ["copy:dist", "uglify:dist", "usebanner:dist"]);
 
     grunt.registerTask("test:node", ["mochaTest:node"]);
     grunt.registerTask("test:local", ["build", "karma:local"]);
-    grunt.registerTask("test:sauce", ["build"].concat(sauceBrowserTasks));
+    grunt.registerTask("test:sauce", ["build", "checkSauceConnectEnv"].concat(sauceBrowserTasks));
 
     grunt.registerTask("coverage", ["mochaTest"]);
 
@@ -148,8 +197,8 @@ module.exports = function(grunt) {
         }
 
         if(!process.env.SAUCE_TUNNEL_ID) {
-            grunt.log.writeln("SAUCE_TUNNEL_ID not set, defaulting to \"bookie.js sauce tunnel\"");
-            process.env.SAUCE_TUNNEL_ID = "bookie.js sauce tunnel";
+            grunt.log.writeln("env SAUCE_TUNNEL_ID needs to be set.");
+            return false;
         }
     });
 };
