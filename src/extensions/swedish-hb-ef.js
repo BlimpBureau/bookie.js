@@ -7,7 +7,7 @@ var _ = require("lodash");
 module.exports = function(options) {
     return {
         name: "SwedishHBEF",
-        apply: apply.bind(null, options),
+        apply: _.partial(apply, options),
         createVerification: createVerification,
         createFiscalYear: createFiscalYear,
         types: types
