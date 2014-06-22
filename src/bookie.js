@@ -1,5 +1,6 @@
 "use strict";
 
+var _ = require("lodash");
 var utils = require("./utils.js");
 var Book = require("./book.js");
 var Account = require("./account.js");
@@ -23,34 +24,26 @@ bookie.vatRateOfPrice = utils.vatRateOfPrice;
 bookie.priceOfVat = utils.priceOfVat;
 bookie.isAmountsEqual = utils.isAmountsEqual;
 
-bookie.exportBook = exportImport.exportBook.bind(null, bookie);
-bookie.exportAccount = exportImport.exportAccount.bind(null, bookie);
-bookie.exportVerification = exportImport.exportVerification.bind(null, bookie);
-bookie.export = exportImport.export.bind(null, bookie);
+bookie.exportBook = _.partial(exportImport.exportBook, bookie);
+bookie.exportAccount = _.partial(exportImport.exportAccount, bookie);
+bookie.exportVerification = _.partial(exportImport.exportVerification, bookie);
+bookie.export = _.partial(exportImport.export, bookie);
 
-bookie.importBook = exportImport.importBook.bind(null, bookie);
-bookie.import = exportImport.import.bind(null, bookie);
+bookie.importBook = _.partial(exportImport.importBook, bookie);
+bookie.import = _.partial(exportImport.import, bookie);
 
 bookie.Book.prototype.export = function() {
-    var args = Array.prototype.slice.call(arguments);
-    args.unshift(this);
-    return bookie.exportBook.apply(null, args);
+    return _.partial(bookie.exportBook, this).apply(null, arguments);
 };
 
 bookie.Book.prototype.import = function() {
-    var args = Array.prototype.slice.call(arguments);
-    args.unshift(this);
-    return bookie.importBook.apply(null, args);
+    return _.partial(bookie.importBook, this).apply(null, arguments);
 };
 
 bookie.Account.prototype.export = function() {
-    var args = Array.prototype.slice.call(arguments);
-    args.unshift(this);
-    return bookie.exportAccount.apply(null, args);
+    return _.partial(bookie.exportAccount, this).apply(null, arguments);
 };
 
 bookie.Verification.prototype.export = function() {
-    var args = Array.prototype.slice.call(arguments);
-    args.unshift(this);
-    return bookie.exportVerification.apply(null, args);
+    return _.partial(bookie.exportVerification, this).apply(null, arguments);
 };
