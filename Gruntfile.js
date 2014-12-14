@@ -78,14 +78,14 @@ module.exports = function(grunt) {
             node: {
                 options: {
                     reporter: "spec",
-                    require: ["test/support/coverage/blanket.js", "test/setup-mocha.js"]
+                    require: ["test/setup-mocha.js"]
                 },
                 src: "test/**/*_test.js"
             },
             coverage: {
                 options: {
                     reporter: "html-cov",
-                    require: ["test/support/coverage/blanket.js", "test/setup-mocha.js"],
+                    require: ["test/setup-mocha.js"],
                     quiet: true,
                     captureFile: "coverage.html"
                 },

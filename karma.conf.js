@@ -12,10 +12,10 @@ module.exports = function(config) {
 
         // list of files / patterns to load in the browser
         files: [
-            "bower_components/lodash/dist/lodash.min.js",
-            "bower_components/chai/chai.js",
-            "bower_components/sinon-chai/lib/sinon-chai.js",
-            "bower_components/sinon/index.js",
+            "node_modules/lodash/dist/lodash.min.js",
+            "node_modules/chai/chai.js",
+            "node_modules/sinon-chai/lib/sinon-chai.js",
+            "node_modules/sinon/pkg/sinon.js",
             "build/bookie.js",
             "build/bookie-swedish-hb-ef.js",
             "test/setup-karma.js",
