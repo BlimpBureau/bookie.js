@@ -1,7 +1,7 @@
 /* jshint strict:false */
 /* global bookie:true, _:true, chai:true, expect:true, bookieSwedishHBEF:true, sinon:true */
 
-require('blanket')({});
+require("blanket")({});
 
 bookie = require("../src/bookie.js");
 bookieSwedishHBEF = require("../src/extensions/swedish-hb-ef.js");
