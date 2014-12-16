@@ -4,6 +4,14 @@ var utils = require("./utils.js");
 
 module.exports = FiscalYear;
 
+/**
+ * Represents a fiscal year range in a bookkeeping {@link Book}.
+ * @Constructor
+ * @public
+ * @param {Book} book The book that the fiscal year belongs to.
+ * @param {date|string} from The inclusive start range of the fiscal year. If string, it will be parsed to a date.
+ * @param {date|string} to The inclusive end range of the fiscal year. If string, it will be parsed to a date.
+ */
 function FiscalYear(book, from, to) {
     from = utils.parseDate(from);
     to = utils.parseDate(to);
