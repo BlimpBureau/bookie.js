@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<title>DocStrap Source: date/date.js</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cosmo.css">
+
+</head>
+
+<body>
+<div class="container-fluid">
+	<div class="navbar navbar-fixed-top navbar-inverse">
+		<div class="navbar-inner">
+			<a class="brand" href="index.html">DocStrap</a>
+			<ul class="nav">
+				
+				<li class="dropdown">
+					<a href="modules.list.html" class="dropdown-toggle" data-toggle="dropdown">Modules<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="module-bookie.html">bookie</a>
+						</li>
+						
+						<li>
+							<a href="date.html">bookie/date</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+				<li class="dropdown">
+					<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="Account.html">Account</a>
+						</li>
+						
+						<li>
+							<a href="Book.html">Book</a>
+						</li>
+						
+						<li>
+							<a href="FiscalYear.html">FiscalYear</a>
+						</li>
+						
+						<li>
+							<a href="Verification.html">Verification</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+				<li class="dropdown">
+					<a href="global.html" class="dropdown-toggle" data-toggle="dropdown">Global<b
+						class="caret"></b></a>
+
+					<ul class="dropdown-menu ">
+						
+						<li>
+							<a href="global.html#_">_</a>
+						</li>
+						
+
+					</ul>
+				</li>
+				
+			</ul>
+		</div>
+	</div>
+
+	<div class="row-fluid">
+
+		
+			<div class="span12">
+				
+				<div id="main">
+					
+
+
+		<h1 class="page-title">Source: date/date.js</h1>
+    
+<section>
+	<article>
+		<pre
+			class="sunlight-highlight-javascript linenums">"use strict";
+
+var _ = require("lodash");
+
+/**
+ * @exports bookie/date
+ */
+var dateModule = module.exports = {};
+
+/**
+ * Parses the input into a date. The date will always be set to the time 00:00:00 GMT+0.
+ * This function parses strings of the format YYYY-MM-dd where the first M or d is optional if it is 0.
+ * @public
+ * @param {date|string} date The date to parse to a timeless `date` object. If date, the time part will simply be set to the specification. If string, it will be parsed to the given date.
+ * @returns {?date} The parsed date. If invalid input is given the function will return null.
+ */
+dateModule.parse = function(date) {
+    if(_.isDate(date)) {
+        //TODO: Remove time part and set timezone.
+        return date;
+    }
+
+    if(!date || !_.isString(date)) {
+        return null;
+    }
+
+    var parts = date.split("-");
+
+    if(parts.length !== 3) {
+        return null;
+    }
+
+    var year = +parts[0];
+    var month = +parts[1];
+    var day = +parts[2];
+
+    if(!year || !month || !day) {
+        return null;
+    }
+
+    var d = new Date(Date.UTC(year, month - 1, day));
+
+    //TODO: Make sure to set the date to the timezone GMT+0?
+    //Make sure the date has the time 00:00:00.
+    //Since javascript Date will add or subtract hours depending on local timezone, make sure the date gets back to 00:00:00.
+    var userOffset = d.getTimezoneOffset() * 60000; //Hours
+    d.setTime(d.getTime() + userOffset);
+
+    return d;
+};
+
+/**
+ * Serializes a date object to a string of the format YYYY-MM-dd.
+ * @public
+ * @param {string|date} date The date to serialize. If string, it will be parsed as a date before serializing.
+ * @returns {?string} The serialized string representation of the date. Null if invalid input.
+ */
+dateModule.toString = function(date) {
+    date = dateModule.parse(date);
+
+    if(!date) {
+        return null;
+    }
+
+    var d = date.getDate();
+    var m = date.getMonth() + 1;
+    var y = date.getFullYear();
+
+    return "" + y + "-" + (m &lt;= 9 ? "0" + m : m) + "-" + (d &lt;= 9 ? "0" + d : d);
+};
+
+/**
+ * Tells if two dates are equal.
+ * @public
+ * @param {string|date} date1 The first date to check for equality with the second date. If string, it will be parsed to a date.
+ * @param {string|date} date2 The second date to check for equality with the first date. If string, it will be parsed to a date.
+ * @returns {boolean} True if the given dates are equal. False if they are not equal or if any of the dates are invalid.
+ */
+dateModule.isEqual = function(date1, date2) {
+    date1 = dateModule.parse(date1);
+    date2 = dateModule.parse(date2);
+
+    if(!date1 || !date2) {
+        return null;
+    }
+
+    return date1.getTime() === date2.getTime();
+};
+</pre>
+	</article>
+</section>
+
+
+
+
+
+				</div>
+
+				<div class="clearfix"></div>
+				<footer>
+					
+					
+		<span class="copyright">
+		DocStrap Copyright © 2012-2014 The contributors to the JSDoc3 and DocStrap projects.
+		</span>
+					<br />
+					
+		<span class="jsdoc-message">
+		Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a>
+		on Tue Dec 16th 2014 using the <a
+			href="https://github.com/terryweiss/docstrap">DocStrap template</a>.
+		</span>
+				</footer>
+			</div>
+
+			
+			<br clear="both">
+		</div>
+
+	</div>
+	<!--<script src="scripts/sunlight.js"></script>-->
+	<script src="scripts/docstrap.lib.js"></script>
+	<script src="scripts/bootstrap-dropdown.js"></script>
+	<script src="scripts/toc.js"></script>
+
+	<script>
+		$( function () {
+			$( "[id*='$']" ).each( function () {
+				var $this = $( this );
+
+				$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+			} );
+
+			$( "#toc" ).toc( {
+				anchorName  : function ( i, heading, prefix ) {
+					return $( heading ).attr( "id" ) || ( prefix + i );
+				},
+				selectors   : "h1,h2,h3,h4",
+				showAndHide : false,
+				scrollTo    : "100px"
+			} );
+
+			$( "#toc>ul" ).addClass( "nav nav-pills nav-stacked" );
+			$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+			$( '.dropdown-toggle' ).dropdown();
+//			$( ".tutorial-section pre, .readme-section pre" ).addClass( "sunlight-highlight-javascript" ).addClass( "linenums" );
+
+			$( ".tutorial-section pre, .readme-section pre" ).each( function () {
+				var $this = $( this );
+
+				var example = $this.find( "code" );
+				exampleText = example.html();
+				var lang = /{@lang (.*?)}/.exec( exampleText );
+				if ( lang && lang[1] ) {
+					exampleText = exampleText.replace( lang[0], "" );
+					example.html( exampleText );
+					lang = lang[1];
+				} else {
+					lang = "javascript";
+				}
+
+				if ( lang ) {
+
+					$this
+						.addClass( "sunlight-highlight-" + lang )
+						.addClass( "linenums" )
+						.html( example.html() );
+
+				}
+			} );
+
+			Sunlight.highlightAll( {
+				lineNumbers : true,
+				showMenu : true,
+				enableDoclinks : true
+			} );
+		} );
+	 </script>
+
+
+
+	<!--Navigation and Symbol Display-->
+	
+
+
+	<!--Google Analytics-->
+	
+
+</body>
+</html>
