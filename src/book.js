@@ -12,7 +12,7 @@ var FiscalYear = require("./fiscal-year.js");
 
 module.exports = Book;
 
-/** 
+/**
  * @typedef Extension
  * @type {object}
  * @property {string} name - The name of the extension. Must be unique in the context of used extensions in this book.

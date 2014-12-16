@@ -32,12 +32,11 @@ bookie.Book = Book;
  */
 bookie.Account = Account;
 
-/** 
+/**
  * {@link Verification} constructor.
  * @private
  */
 bookie.Verification = Verification;
-
 
 bookie.parseDate = utils.parseDate;
 bookie.dateToString = utils.dateToString;
