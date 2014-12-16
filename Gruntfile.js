@@ -149,6 +149,14 @@ module.exports = function(grunt) {
                     src: "dist/**/*"
                 }
             }
+        },
+        jsdoc: {
+            all: {
+                src: ["src/**/*.js"],
+                options: {
+                    destination: "doc"
+                }
+            }
         }
     };
 
@@ -167,7 +175,7 @@ module.exports = function(grunt) {
     grunt.registerTask("sauceConnect:start", ["checkSauceConnectEnv", "sauce_connect"]);
     grunt.registerTask("sauceConnect:stop", ["sauce-connect-close"]);
 
-    grunt.registerTask("build", ["browserify"]);
+    grunt.registerTask("build", ["browserify", "jsdoc"]);
     grunt.registerTask("dist", ["copy:dist", "uglify:dist", "usebanner:dist"]);
 
     grunt.registerTask("test:node", ["mochaTest:node"]);
