@@ -6,14 +6,22 @@ function validDate(date, year, month, day) {
     expect(date.getDate()).to.equal(day);
     expect(date.getMonth()).to.equal(month - 1);
     expect(date.getFullYear()).to.equal(year);
+    expect(date.getHours()).to.equal(0);
+    expect(date.getMinutes()).to.equal(0);
+    expect(date.getSeconds()).to.equal(0);
+    expect(date.getMilliseconds()).to.equal(0);
 }
 
 describe("date", function() {
     describe("parse", function() {
-        it("should return dates if given dates", function() {
+        it("should return dates without time if given dates", function() {
             var date = new Date();
-
-            expect(dateUtils.parse(date)).to.equal(date);
+            date.setTime(1332403882588); //2012-03-22
+            var expectedDate = new Date();
+            expectedDate.setTime(1332370800000);
+            var actual = dateUtils.parse(date);
+            expect(actual.getTime()).to.equal(expectedDate.getTime());
+            validDate(actual, 2012, 3, 22);
         });
 
         it("should parse string dates to dates", function() {
@@ -33,11 +41,7 @@ describe("date", function() {
     });
 
     describe("isEqual", function() {
-        it("should be defined", function() {
-            expect(dateUtils.isEqual).to.be.a("function");
-        });
-
-        it("should work as expected", function() {
+        it("should return true if dates are equal, false otherwise", function() {
             expect(dateUtils.isEqual("2012-01-02", "2012-01-02")).to.equal(true);
             expect(dateUtils.isEqual("2012-01-02", "2012-01-03")).to.equal(false);
             expect(dateUtils.isEqual(dateUtils.parse("2012-01-02"), "2012-01-02")).to.equal(true);
@@ -45,13 +49,15 @@ describe("date", function() {
             expect(dateUtils.isEqual(dateUtils.parse("2012-01-03"), "2012-01-02")).to.equal(false);
             expect(dateUtils.isEqual(dateUtils.parse("2012-01-02"), dateUtils.parse("2012-02-02"))).to.equal(false);
         });
+
+        it("should return false if any date is invalid", function() {
+            expect(dateUtils.isEqual(null, null)).to.equal(false);
+            expect(dateUtils.isEqual(null, dateUtils.parse("2012-01-01"))).to.equal(false);
+            expect(dateUtils.isEqual("2012-01-01", null)).to.equal(false);
+        });
     });
 
     describe("toString", function() {
-        it("should be defined", function() {
-            expect(dateUtils.toString).to.be.a("function");
-        });
-
         it("should convert a date to a string", function() {
             expect(dateUtils.toString(dateUtils.parse("2012-03-10"))).to.equal("2012-03-10");
             expect(dateUtils.toString(dateUtils.parse("1991-1-05"))).to.equal("1991-01-05");
@@ -59,14 +65,20 @@ describe("date", function() {
             expect(dateUtils.toString(dateUtils.parse("1991-12-31"))).to.equal("1991-12-31");
             expect(dateUtils.toString(dateUtils.parse("1991-1-1"))).to.equal("1991-01-01");
         });
+
+        it("should parse and convert string dates to a string", function() {
+            expect(dateUtils.toString("2012-03-10")).to.equal("2012-03-10");
+            expect(dateUtils.toString("1991-1-05")).to.equal("1991-01-05");
+        });
+
+        it("should return null on invalid input", function() {
+            expect(dateUtils.toString()).to.equal(null);
+            expect(dateUtils.toString(true)).to.equal(null);
+        });
     });
 
     describe("isInsideDates", function() {
-        it("should be defined", function() {
-            expect(dateUtils.isInsideDates).to.be.a("function");
-        });
-
-        it("should return true for dates inside range", function() {
+        it("should return true for dates inside range and false otherwise", function() {
             expect(dateUtils.isInsideDates(dateUtils.parse("2014-02-01"), "2012-01-01", "2014-02-02")).to.equal(true);
             expect(dateUtils.isInsideDates(dateUtils.parse("2014-02-02"), "2012-01-01", "2014-02-02")).to.equal(true);
             expect(dateUtils.isInsideDates(dateUtils.parse("2012-01-01"), "2012-01-01", "2014-02-02")).to.equal(true);
@@ -91,6 +103,11 @@ describe("date", function() {
             expect(dateUtils.isInsideDates(dateUtils.parse("1912-02-22"))).to.equal(true);
             expect(dateUtils.isInsideDates(dateUtils.parse("2115-12-21"))).to.equal(true);
             expect(dateUtils.isInsideDates(dateUtils.parse("2010-09-03"))).to.equal(true);
+        });
+
+        it("should return false for invalid date", function() {
+            expect(dateUtils.isInsideDates()).to.equal(false);
+            expect(dateUtils.isInsideDates("123123")).to.equal(false);
         });
     });
 });

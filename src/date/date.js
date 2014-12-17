@@ -8,16 +8,25 @@ var _ = require("lodash");
 var dateModule = module.exports = {};
 
 /**
- * Parses the input into a date. The date will always be set to the time 00:00:00 GMT+0.
+ * Parses the input into a date. The date will always be set to the time 00:00:00 GMT+0. Note that this discards the local timezone, so GMT+1 will still be 00:00:00.
  * This function parses strings of the format YYYY-MM-dd where the first M or d is optional if it is 0.
  * @public
  * @param {date|string} date The date to parse to a timeless `date` object. If date, the time part will simply be set to the specification. If string, it will be parsed to the given date.
  * @returns {?date} The parsed date. If invalid input is given the function will return null.
  */
 dateModule.parse = function(date) {
-    if(_.isDate(date)) {
-        //TODO: Remove time part and set timezone.
+    //Make sure the date has the time 00:00:00 GMT.
+    //Note that if there is local timezone offset the time will be the same as the time zone offset. So GMT+1 will yield the time 01:00:00.
+    function createDate(year, month, day) {
+        var date = new Date();
+        var seconds = Date.UTC(year, month, day);
+        var localOffset = date.getTimezoneOffset() * 60000; //User time offset in hours.
+        date.setTime(seconds + localOffset);
         return date;
+    }
+
+    if(_.isDate(date)) {
+        return createDate(date.getFullYear(), date.getMonth(), date.getDate());
     }
 
     if(!date || !_.isString(date)) {
@@ -38,15 +47,7 @@ dateModule.parse = function(date) {
         return null;
     }
 
-    var d = new Date(Date.UTC(year, month - 1, day));
-
-    //TODO: Make sure to set the date to the timezone GMT+0?
-    //Make sure the date has the time 00:00:00.
-    //Since javascript Date will add or subtract hours depending on local timezone, make sure the date gets back to 00:00:00.
-    var userOffset = d.getTimezoneOffset() * 60000; //Hours
-    d.setTime(d.getTime() + userOffset);
-
-    return d;
+    return createDate(year, month - 1, day);
 };
 
 /**
@@ -81,7 +82,7 @@ dateModule.isEqual = function(date1, date2) {
     date2 = dateModule.parse(date2);
 
     if(!date1 || !date2) {
-        return null;
+        return false;
     }
 
     return date1.getTime() === date2.getTime();
