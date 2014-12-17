@@ -19,7 +19,8 @@ module.exports = function(config) {
             "build/bookie.js",
             "build/bookie-swedish-hb-ef.js",
             "test/setup-karma.js",
-            "test/**/*_test.js"
+            "test/bookie_test.js",
+            "test/extensions/swedish-hb-ef_test.js"
         ],
 
         // list of files to exclude

@@ -43,13 +43,18 @@ module.exports = function(grunt) {
                 " * Licensed under <%= pkg.license %>\n" +
                 " */\n",
         jshint: {
-            all: ["src/**/*.js", "test/**/*.js", "*.js"],
+            src: {
+                src: ["src/**/*.js", "*.js"]
+            },
+            test: {
+                src: "test/**/*.js"
+            },
             options: {
                 jshintrc: true
             }
         },
         jscs: {
-            src: ["src/**/*.js", "test/**/*.js", "*.js", "*.json", ".jshintrc"],
+            all: ["src/**/*.js", "test/**/*.js", "*.js", "*.json", ".jshintrc"],
             options: {
                 config: ".jscs.json"
             }

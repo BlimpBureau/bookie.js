@@ -86,3 +86,36 @@ dateModule.isEqual = function(date1, date2) {
 
     return date1.getTime() === date2.getTime();
 };
+
+/**
+ * Tells if the given date is inside the given date range.
+ * @public
+ * @param {string|date} date The date to be checked if inside the date range. Will be parsed if string.
+ * @param {?(string|date)} from The lower inclusive bound for the date range. No lower bound if null.
+ * @param {?(string|date)} to The higher inclusive bound for the date range. No higher bound if null.
+ * @returns {boolean} True if the date is inside the given date range. False if not or if date is invalid.
+ */
+dateModule.isInsideDates = function(date, from, to) {
+    date = dateModule.parse(date);
+
+    if(!date) {
+        return false;
+    }
+
+    function parseIfDefined(value) {
+        if(value && _.isDate(value)) {
+            return value;
+        }
+
+        return value ? dateModule.parse(value) : value;
+    }
+
+    if(!_.isDate(date)) {
+        throw new Error("Invalid date.");
+    }
+
+    from = parseIfDefined(from);
+    to = parseIfDefined(to);
+
+    return (!from || date.getTime() >= from.getTime()) && (!to || date.getTime() <= to.getTime());
+};

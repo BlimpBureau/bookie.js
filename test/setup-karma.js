@@ -1,5 +1,5 @@
 /* jshint unused: false */
-/* global chai */
+/* global chai, expect: true */
 
 "use strict";
 
