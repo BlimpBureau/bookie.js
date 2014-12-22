@@ -80,12 +80,26 @@ module.exports = function(grunt) {
             }
         },
         mochaTest: {
-            node: {
+            all: {
                 options: {
                     reporter: "spec",
                     require: ["test/setup-mocha.js"]
                 },
                 src: "test/**/*_test.js"
+            },
+            unit: {
+                options: {
+                    reporter: "spec",
+                    require: ["test/setup-mocha.js"]
+                },
+                src: "test/unit/**/*_test.js"
+            },
+            e2e: {
+                options: {
+                    reporter: "spec",
+                    require: ["test/setup-mocha.js"]
+                },
+                src: "test/e2e/**/*_test.js"
             },
             coverage: {
                 options: {
@@ -183,7 +197,7 @@ module.exports = function(grunt) {
     grunt.registerTask("build", ["browserify", "jsdoc"]);
     grunt.registerTask("dist", ["copy:dist", "uglify:dist", "usebanner:dist"]);
 
-    grunt.registerTask("test:node", ["mochaTest:node"]);
+    grunt.registerTask("test:unit", ["mochaTest:unit"]);
     grunt.registerTask("test:local", ["build", "karma:local"]);
     grunt.registerTask("test:sauce", ["build", "checkSauceConnectEnv"].concat(sauceBrowserTasks));
 
@@ -191,10 +205,10 @@ module.exports = function(grunt) {
 
     grunt.registerTask("test:style", ["jshint", "jscs"]);
 
-    grunt.registerTask("test", ["test:style", "test:node", "build", "karma:local"]);
-    grunt.registerTask("test:full", ["test:style", "test:node", "build", "karma:local", "test:sauce"]);
+    grunt.registerTask("test", ["test:style", "mochaTest", "build", "karma:local"]);
+    grunt.registerTask("test:full", ["test:style", "mochaTest", "build", "karma:local", "test:sauce"]);
 
-    grunt.registerTask("ci", ["jshint", "jscs", "build", "test:node", "sauceConnect:start", "test:sauce", "sauceConnect:stop"]);
+    grunt.registerTask("ci", ["test:style", "mochaTest", "build", "sauceConnect:start", "test:sauce", "sauceConnect:stop"]);
 
     grunt.registerTask("default", ["test"]);
 
