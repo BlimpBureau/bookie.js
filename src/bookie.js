@@ -6,6 +6,7 @@ var Book = require("./book.js");
 var Account = require("./account.js");
 var Verification = require("./verification.js");
 var exportImport = require("./export-import.js");
+var dateUtils = require("./date/date.js");
 
 /**
  * @exports bookie
@@ -38,11 +39,12 @@ bookie.Account = Account;
  */
 bookie.Verification = Verification;
 
-bookie.parseDate = utils.parseDate;
-bookie.dateToString = utils.dateToString;
-bookie.isDatesEqual = utils.isDatesEqual;
+bookie.parseDate = dateUtils.parse;
+bookie.dateToString = dateUtils.stringify;
+bookie.isDatesEqual = dateUtils.isEqual;
+bookie.isInsideDates = dateUtils.isInsideDates;
+
 bookie.round = utils.round;
-bookie.insideDates = utils.insideDates;
 bookie.vatOfPrice = utils.vatOfPrice;
 bookie.vatRateOfPrice = utils.vatRateOfPrice;
 bookie.priceOfVat = utils.priceOfVat;

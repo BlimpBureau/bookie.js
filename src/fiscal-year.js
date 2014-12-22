@@ -1,6 +1,6 @@
 "use strict";
 
-var utils = require("./utils.js");
+var dateUtils = require("./date/date.js");
 
 module.exports = FiscalYear;
 
@@ -13,8 +13,8 @@ module.exports = FiscalYear;
  * @param {date|string} to The inclusive end range of the fiscal year. If string, it will be parsed to a date.
  */
 function FiscalYear(book, from, to) {
-    from = utils.parseDate(from);
-    to = utils.parseDate(to);
+    from = dateUtils.parse(from);
+    to = dateUtils.parse(to);
 
     if(from.getTime() >= to.getTime()) {
         throw new Error("Invalid date range.");

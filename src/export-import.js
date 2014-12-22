@@ -1,7 +1,7 @@
 "use strict";
 
 var _ = require("lodash");
-var utils = require("./utils.js");
+var dateUtils = require("./date/date.js");
 
 exports.exportBook = exportBook;
 exports.exportAccount = exportAccount;
@@ -137,7 +137,7 @@ function exportVerification(bookie, verification, skipHeader) {
     }
 
     output.number = verification.number;
-    output.date = utils.dateToString(verification.date);
+    output.date = dateUtils.stringify(verification.date);
     output.text = verification.text;
 
     output.debits = _.map(verification.debits, function(debit) {

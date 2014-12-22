@@ -1,7 +1,7 @@
 "use strict";
 
 var _ = require("lodash");
-var utils = require("./utils.js");
+var dateUtils = require("./date/date.js");
 
 module.exports = Account;
 
@@ -59,11 +59,11 @@ function sumTransactions(container, from, to, filter) {
         return transaction.amount;
     }
 
-    from = utils.parseDate(from);
-    to = utils.parseDate(to);
+    from = dateUtils.parse(from);
+    to = dateUtils.parse(to);
     filter = filter || noFilter;
 
     return _.reduce(container, function(sum, transaction) {
-        return sum + (utils.insideDates(transaction.verification.date, from, to) ? filter(transaction) : 0);
+        return sum + (dateUtils.isInsideDates(transaction.verification.date, from, to) ? filter(transaction) : 0);
     }, 0) || 0;
 }

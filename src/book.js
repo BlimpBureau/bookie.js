@@ -5,10 +5,10 @@
 "use strict";
 
 var _ = require("lodash");
-var utils = require("./utils.js");
 var Account = require("./account.js");
 var Verification = require("./verification.js");
 var FiscalYear = require("./fiscal-year.js");
+var dateUtils = require("./date/date.js");
 
 module.exports = Book;
 
@@ -121,7 +121,7 @@ Book.prototype.getAccount = function(number) {
  * @returns {Verification} The created verification.
  */
 Book.prototype.createVerification = function(date, text) {
-    var verification = new Verification(this, utils.parseDate(date), text);
+    var verification = new Verification(this, dateUtils.parse(date), text);
 
     var key = verification.number;
 
@@ -163,7 +163,7 @@ Book.prototype.getVerification = function(number) {
  */
 Book.prototype.getVerifications = function(from, to) {
     return _.filter(this.verifications, function(v) {
-        return utils.insideDates(v.date, from, to);
+        return dateUtils.isInsideDates(v.date, from, to);
     });
 };
 
@@ -262,7 +262,7 @@ Book.prototype.doctor = function() {
         });
 
         return _.map(out, function(verification) {
-            return "Verification out of fiscal years range. Verification: " + verification.number + ". Fiscal year range: " + utils.dateToString(start) + " to " + utils.dateToString(end) + ".";
+            return "Verification out of fiscal years range. Verification: " + verification.number + ". Fiscal year range: " + dateUtils.stringify(start) + " to " + dateUtils.stringify(end) + ".";
         });
     }
 
@@ -339,7 +339,7 @@ Book.prototype.getFiscalYear = function(selector) {
     var found = null;
 
     _.forEach(this.fiscalYears, function(fy) {
-        if(utils.insideDates(selector, fy.from, fy.to)) {
+        if(dateUtils.isInsideDates(selector, fy.from, fy.to)) {
             found = fy;
             return false;
         }

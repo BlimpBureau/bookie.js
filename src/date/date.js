@@ -56,7 +56,7 @@ dateModule.parse = function(date) {
  * @param {string|date} date The date to serialize. If string, it will be parsed as a date before serializing.
  * @returns {?string} The serialized string representation of the date. Null if invalid input.
  */
-dateModule.toString = function(date) {
+dateModule.stringify = function(date) {
     date = dateModule.parse(date);
 
     if(!date) {
