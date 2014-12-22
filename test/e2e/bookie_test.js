@@ -3,6 +3,16 @@
 
 "use strict";
 
+function validDate(date, year, month, day) {
+    expect(date.getDate()).to.equal(day);
+    expect(date.getMonth()).to.equal(month - 1);
+    expect(date.getFullYear()).to.equal(year);
+    expect(date.getHours()).to.equal(0);
+    expect(date.getMinutes()).to.equal(0);
+    expect(date.getSeconds()).to.equal(0);
+    expect(date.getMilliseconds()).to.equal(0);
+}
+
 function makeTransactions(book) {
     var verifications = [];
 
@@ -85,16 +95,9 @@ describe("bookie.js", function() {
             expect(bookie.parseDate).to.be.a("function");
         });
 
-        function validDate(date, year, month, day) {
-            expect(date.getDate()).to.equal(day);
-            expect(date.getMonth()).to.equal(month - 1);
-            expect(date.getFullYear()).to.equal(year);
-        }
-
-        it("should return dates if given dates", function() {
-            var date = new Date();
-
-            expect(bookie.parseDate(date)).to.equal(date);
+        it("should return dates without time if given dates", function() {
+            var date = new Date("2012-01-01");
+            validDate(bookie.parseDate(date), 2012, 1, 1);
         });
 
         it("should parse string dates to dates", function() {
@@ -142,36 +145,36 @@ describe("bookie.js", function() {
         });
     });
 
-    describe("insideDates", function() {
+    describe("isInsideDates", function() {
         it("should be defined", function() {
-            expect(bookie.insideDates).to.be.a("function");
+            expect(bookie.isInsideDates).to.be.a("function");
         });
 
         it("should return true for dates inside range", function() {
-            expect(bookie.insideDates(bookie.parseDate("2014-02-01"), "2012-01-01", "2014-02-02")).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2014-02-02"), "2012-01-01", "2014-02-02")).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2012-01-01"), "2012-01-01", "2014-02-02")).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2014-02-03"), "2012-01-01", "2014-02-02")).to.equal(false);
-            expect(bookie.insideDates(bookie.parseDate("2011-12-30"), "2012-01-01", "2014-02-02")).to.equal(false);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-02-01"), "2012-01-01", "2014-02-02")).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-02-02"), "2012-01-01", "2014-02-02")).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2012-01-01"), "2012-01-01", "2014-02-02")).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-02-03"), "2012-01-01", "2014-02-02")).to.equal(false);
+            expect(bookie.isInsideDates(bookie.parseDate("2011-12-30"), "2012-01-01", "2014-02-02")).to.equal(false);
 
-            expect(bookie.insideDates(bookie.parseDate("2014-12-20"), "2014-12-20", "2014-12-20")).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2014-12-21"), "2014-12-20", "2014-12-20")).to.equal(false);
-            expect(bookie.insideDates(bookie.parseDate("2014-12-19"), "2014-12-20", "2014-12-20")).to.equal(false);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-12-20"), "2014-12-20", "2014-12-20")).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-12-21"), "2014-12-20", "2014-12-20")).to.equal(false);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-12-19"), "2014-12-20", "2014-12-20")).to.equal(false);
         });
 
         it("should be able to skip from and to arguments", function() {
-            expect(bookie.insideDates(bookie.parseDate("2014-12-20"), "2014-12-20")).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2014-12-21"), "2014-12-20")).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2015-12-21"), "2014-12-20")).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2014-11-21"), "2014-12-20")).to.equal(false);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-12-20"), "2014-12-20")).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-12-21"), "2014-12-20")).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2015-12-21"), "2014-12-20")).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-11-21"), "2014-12-20")).to.equal(false);
 
-            expect(bookie.insideDates(bookie.parseDate("2014-12-20"), null, "2014-12-20")).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2010-12-21"), null, "2014-12-20")).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2014-12-21"), null, "2014-12-20")).to.equal(false);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-12-20"), null, "2014-12-20")).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2010-12-21"), null, "2014-12-20")).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2014-12-21"), null, "2014-12-20")).to.equal(false);
 
-            expect(bookie.insideDates(bookie.parseDate("1912-02-22"))).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2115-12-21"))).to.equal(true);
-            expect(bookie.insideDates(bookie.parseDate("2010-09-03"))).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("1912-02-22"))).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2115-12-21"))).to.equal(true);
+            expect(bookie.isInsideDates(bookie.parseDate("2010-09-03"))).to.equal(true);
         });
     });
 
@@ -501,18 +504,18 @@ describe("bookie.js", function() {
                 });
 
                 it("should create a new Verification instance", function() {
-                    var date = new Date();
+                    var date = new Date("2012-01-01");
                     var v = book.createVerification(date, "text");
 
                     expect(v.book).to.equal(book);
                     expect(v.number).to.equal(1);
-                    expect(v.date).to.equal(date);
+                    validDate(v.date, 2012, 1, 1);
                     expect(v.text).to.equal("text");
 
                     v = book.createVerification(date, "test");
                     expect(v.book).to.equal(book);
                     expect(v.number).to.equal(2);
-                    expect(v.date).to.equal(date);
+                    validDate(v.date, 2012, 1, 1);
                     expect(v.text).to.equal("test");
                 });
 
@@ -581,7 +584,7 @@ describe("bookie.js", function() {
 
                     function expected(from, to) {
                         return _.filter(verifications, function(v) {
-                            return bookie.insideDates(v.date, from, to);
+                            return bookie.isInsideDates(v.date, from, to);
                         });
                     }
 

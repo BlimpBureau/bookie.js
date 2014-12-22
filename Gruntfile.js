@@ -80,13 +80,6 @@ module.exports = function(grunt) {
             }
         },
         mochaTest: {
-            all: {
-                options: {
-                    reporter: "spec",
-                    require: ["test/setup-mocha.js"]
-                },
-                src: "test/**/*_test.js"
-            },
             unit: {
                 options: {
                     reporter: "spec",
