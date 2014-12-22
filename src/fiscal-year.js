@@ -1,6 +1,6 @@
 "use strict";
 
-var dateUtils = require("./date/date.js");
+var dateUtils = require("./date/date-utils.js");
 
 module.exports = FiscalYear;
 

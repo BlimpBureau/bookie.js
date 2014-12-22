@@ -6,7 +6,7 @@ var Book = require("./book.js");
 var Account = require("./account.js");
 var Verification = require("./verification.js");
 var exportImport = require("./export-import.js");
-var dateUtils = require("./date/date.js");
+var dateUtils = require("./date/date-utils.js");
 
 /**
  * @exports bookie

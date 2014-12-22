@@ -8,7 +8,7 @@ var _ = require("lodash");
 var Account = require("./account.js");
 var Verification = require("./verification.js");
 var FiscalYear = require("./fiscal-year.js");
-var dateUtils = require("./date/date.js");
+var dateUtils = require("./date/date-utils.js");
 
 module.exports = Book;
 

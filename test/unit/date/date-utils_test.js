@@ -1,6 +1,6 @@
 "use strict";
 
-var dateUtils = require("../../../src/date/date.js");
+var dateUtils = require("../../../src/date/date-utils.js");
 
 function validDate(date, year, month, day) {
     expect(date.getDate()).to.equal(day);
