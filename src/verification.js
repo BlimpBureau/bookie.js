@@ -1,7 +1,7 @@
 "use strict";
 
 var _ = require("lodash");
-var utils = require("./utils.js");
+var numberUtils = require("./financial/number-utils");
 
 module.exports = Verification;
 
@@ -60,7 +60,7 @@ Verification.prototype.credit = function(account, amount) {
  * @return {boolean} True if the verification is balanced. False otherwise.
  */
 Verification.prototype.isBalancedCreditDebit = function() {
-    return utils.isAmountsEqual(sumTransactions(this.debits), sumTransactions(this.credits));
+    return numberUtils.isEqual(sumTransactions(this.debits), sumTransactions(this.credits));
 };
 
 /**
@@ -110,7 +110,7 @@ function accountTransaction(verification, type, account, amount) {
         throw new Error("Invalid account. Book of account and the verification needs to be the same.");
     }
 
-    amount = utils.round(amount);
+    amount = numberUtils.round(amount);
 
     if(amount <= 0) {
         throw new Error("Amount cannot be less or equal to zero.");

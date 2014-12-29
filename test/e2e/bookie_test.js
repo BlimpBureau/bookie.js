@@ -39,6 +39,16 @@ function makeAccounts(book) {
     return accounts;
 }
 
+function expectMethods(methods) {
+    _.forEach(methods, function(method) {
+        try {
+            expect(bookie[method]).to.be.a("function");
+        } catch(e) {
+            throw new Error("Expected method '" + method + "' to be present in bookie.");
+        }
+    });
+}
+
 describe("bookie.js", function() {
     it("should be defined", function() {
         expect(bookie).to.be.a("object");
@@ -48,181 +58,16 @@ describe("bookie.js", function() {
         expect(bookie.version).to.equal("v0.0.0");
     });
 
-    describe("round", function() {
-        it("should be defined and have roundDecimals in place", function() {
-            expect(bookie.round).to.be.a("function");
-        });
-
-        it("should round numbers to the set decimals", function() {
-            expect(bookie.round(19.3141)).to.equal(19.31);
-            expect(bookie.round(15.5)).to.equal(15.5);
-            expect(bookie.round(15.555)).to.equal(15.56);
-            expect(bookie.round(0.001)).to.equal(0);
-
-            expect(bookie.round(19.3141, 1)).to.equal(19.3);
-            expect(bookie.round(15.5, 1)).to.equal(15.5);
-            expect(bookie.round(15.555, 1)).to.equal(15.6);
-            expect(bookie.round(0.001, 1)).to.equal(0);
-
-            expect(bookie.round(19.3141, 0)).to.equal(19);
-            expect(bookie.round(15.5, 0)).to.equal(16);
-            expect(bookie.round(15.555, 0)).to.equal(16);
-            expect(bookie.round(0.001, 0)).to.equal(0);
-        });
-
-        it("should be able to round really big numbers", function() {
-            expect(bookie.round(1031313124120102401204102412401204102.121241512, 3)).to.equal(1031313124120102401204102412401204102.121);
-            expect(bookie.round(1031313124120102401204102412401204114124124125125151251251202.1399, 3)).to.equal(1031313124120102401204102412401204114124124125125151251251202.14);
-        });
-
-        it("should throw on invalid arguments", function() {
-            expect(function() {
-                bookie.round(true);
-            }).to.throw(Error);
-
-            expect(function() {
-                bookie.round(new Date());
-            }).to.throw(Error);
-
-            expect(function() {
-                bookie.round(13, 13.37);
-            }).to.throw(Error);
-        });
+    it("should have date utils available", function() {
+        expectMethods(["parseDate", "isDatesEqual", "dateToString", "isInsideDates"]);
     });
 
-    describe("parseDate", function() {
-        it("should be defined", function() {
-            expect(bookie.parseDate).to.be.a("function");
-        });
-
-        it("should return dates without time if given dates", function() {
-            var date = new Date("2012-01-01");
-            validDate(bookie.parseDate(date), 2012, 1, 1);
-        });
-
-        it("should parse string dates to dates", function() {
-            validDate(bookie.parseDate("2014-01-02"), 2014, 1, 2);
-            validDate(bookie.parseDate("2014-1-2"), 2014, 1, 2);
-        });
-
-        it("should return null if unable to parse date", function() {
-            expect(bookie.parseDate()).to.equal(null);
-            expect(bookie.parseDate("adwd")).to.equal(null);
-            expect(bookie.parseDate({ wat:"sup" })).to.equal(null);
-            expect(bookie.parseDate(1412)).to.equal(null);
-            expect(bookie.parseDate(1337)).to.equal(null);
-            expect(bookie.parseDate(true)).to.equal(null);
-            expect(bookie.parseDate(1.1)).to.equal(null);
-        });
+    it("should have number utils available", function() {
+        expectMethods(["round", "isValidNumber", "isDecimalPercent", "isAmountsEqual"]);
     });
 
-    describe("isDatesEqual", function() {
-        it("should be defined", function() {
-            expect(bookie.isDatesEqual).to.be.a("function");
-        });
-
-        it("should work as expected", function() {
-            expect(bookie.isDatesEqual("2012-01-02", "2012-01-02")).to.equal(true);
-            expect(bookie.isDatesEqual("2012-01-02", "2012-01-03")).to.equal(false);
-            expect(bookie.isDatesEqual(bookie.parseDate("2012-01-02"), "2012-01-02")).to.equal(true);
-            expect(bookie.isDatesEqual(bookie.parseDate("2012-01-02"), bookie.parseDate("2012-01-02"))).to.equal(true);
-            expect(bookie.isDatesEqual(bookie.parseDate("2012-01-03"), "2012-01-02")).to.equal(false);
-            expect(bookie.isDatesEqual(bookie.parseDate("2012-01-02"), bookie.parseDate("2012-02-02"))).to.equal(false);
-        });
-    });
-
-    describe("dateToString", function() {
-        it("should be defined", function() {
-            expect(bookie.dateToString).to.be.a("function");
-        });
-
-        it("should convert a date to a string", function() {
-            expect(bookie.dateToString(bookie.parseDate("2012-03-10"))).to.equal("2012-03-10");
-            expect(bookie.dateToString(bookie.parseDate("1991-1-05"))).to.equal("1991-01-05");
-            expect(bookie.dateToString(bookie.parseDate("2012-4-1"))).to.equal("2012-04-01");
-            expect(bookie.dateToString(bookie.parseDate("1991-12-31"))).to.equal("1991-12-31");
-            expect(bookie.dateToString(bookie.parseDate("1991-1-1"))).to.equal("1991-01-01");
-        });
-    });
-
-    describe("isInsideDates", function() {
-        it("should be defined", function() {
-            expect(bookie.isInsideDates).to.be.a("function");
-        });
-
-        it("should return true for dates inside range", function() {
-            expect(bookie.isInsideDates(bookie.parseDate("2014-02-01"), "2012-01-01", "2014-02-02")).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2014-02-02"), "2012-01-01", "2014-02-02")).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2012-01-01"), "2012-01-01", "2014-02-02")).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2014-02-03"), "2012-01-01", "2014-02-02")).to.equal(false);
-            expect(bookie.isInsideDates(bookie.parseDate("2011-12-30"), "2012-01-01", "2014-02-02")).to.equal(false);
-
-            expect(bookie.isInsideDates(bookie.parseDate("2014-12-20"), "2014-12-20", "2014-12-20")).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2014-12-21"), "2014-12-20", "2014-12-20")).to.equal(false);
-            expect(bookie.isInsideDates(bookie.parseDate("2014-12-19"), "2014-12-20", "2014-12-20")).to.equal(false);
-        });
-
-        it("should be able to skip from and to arguments", function() {
-            expect(bookie.isInsideDates(bookie.parseDate("2014-12-20"), "2014-12-20")).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2014-12-21"), "2014-12-20")).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2015-12-21"), "2014-12-20")).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2014-11-21"), "2014-12-20")).to.equal(false);
-
-            expect(bookie.isInsideDates(bookie.parseDate("2014-12-20"), null, "2014-12-20")).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2010-12-21"), null, "2014-12-20")).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2014-12-21"), null, "2014-12-20")).to.equal(false);
-
-            expect(bookie.isInsideDates(bookie.parseDate("1912-02-22"))).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2115-12-21"))).to.equal(true);
-            expect(bookie.isInsideDates(bookie.parseDate("2010-09-03"))).to.equal(true);
-        });
-    });
-
-    describe("vatOfPrice", function() {
-        it("should return the correct vat by price exclusive vat", function() {
-            expect(bookie.vatOfPrice(100, 0.25, false)).to.equal(25);
-        });
-
-        it("should default priceIncludingVat paramater to false", function() {
-            expect(bookie.vatOfPrice(100, 0.25)).to.equal(25);
-        });
-
-        it("should work with float vat values", function() {
-            expect(bookie.vatOfPrice(1, 0.1)).to.equal(0.1);
-        });
-
-        it("should return the correct vat by price inclusive vat", function() {
-            expect(bookie.vatOfPrice(100, 0.25, true)).to.equal(20);
-        });
-    });
-
-    describe("vatRateOfPrice", function() {
-        it("should return the correct vat rate by price exlcusive vat", function() {
-            expect(bookie.vatRateOfPrice(100, 25, false)).to.equal(0.25);
-        });
-
-        it("should default priceIncludingVat parameter to false", function() {
-            expect(bookie.vatRateOfPrice(100, 10)).to.equal(0.1);
-        });
-
-        it("should return the correct vat rate by price inclusive vat", function() {
-            expect(bookie.vatRateOfPrice(100, 20, true)).to.equal(0.25);
-        });
-    });
-
-    describe("priceOfVat", function() {
-        it("should return the correct price by price exclusive vat", function() {
-            expect(bookie.priceOfVat(25, 0.25, false)).to.equal(100);
-        });
-
-        it("should default priceIncludingVat parameter to false", function() {
-            expect(bookie.priceOfVat(10, 0.1)).to.equal(100);
-        });
-
-        it("should return the correct price by price inclusive vat", function() {
-            expect(bookie.priceOfVat(20, 0.25, true)).to.equal(100);
-            expect(bookie.priceOfVat(10, 0.1, true)).to.equal(110);
-        });
+    it("should have financial utils available", function() {
+        expectMethods(["vatOfPrice", "vatRateOfPrice", "priceOfVat"]);
     });
 
     describe("Book", function() {

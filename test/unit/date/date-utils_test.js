@@ -12,7 +12,7 @@ function validDate(date, year, month, day) {
     expect(date.getMilliseconds()).to.equal(0);
 }
 
-describe("date", function() {
+describe("dateUtils", function() {
     describe("parse", function() {
         it("should return dates without time if given dates", function() {
             var date = new Date();

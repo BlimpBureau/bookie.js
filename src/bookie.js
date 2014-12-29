@@ -1,7 +1,8 @@
 "use strict";
 
 var _ = require("lodash");
-var utils = require("./utils.js");
+var numberUtils = require("./financial/number-utils.js");
+var financialUtils = require("./financial/financial-utils.js");
 var Book = require("./book.js");
 var Account = require("./account.js");
 var Verification = require("./verification.js");
@@ -39,17 +40,24 @@ bookie.Account = Account;
  */
 bookie.Verification = Verification;
 
+//Export date utils.
 bookie.parseDate = dateUtils.parse;
 bookie.dateToString = dateUtils.stringify;
 bookie.isDatesEqual = dateUtils.isEqual;
 bookie.isInsideDates = dateUtils.isInsideDates;
 
-bookie.round = utils.round;
-bookie.vatOfPrice = utils.vatOfPrice;
-bookie.vatRateOfPrice = utils.vatRateOfPrice;
-bookie.priceOfVat = utils.priceOfVat;
-bookie.isAmountsEqual = utils.isAmountsEqual;
+//Export number utils.
+bookie.round = numberUtils.round;
+bookie.isAmountsEqual = numberUtils.isEqual;
+bookie.isDecimalPercent = numberUtils.isDecimalPercent;
+bookie.isValidNumber = numberUtils.isValidNumber;
 
+//Export financial utils.
+bookie.vatOfPrice = financialUtils.vatOfPrice;
+bookie.vatRateOfPrice = financialUtils.vatRateOfPrice;
+bookie.priceOfVat = financialUtils.priceOfVat;
+
+//Export importing and exporting methods.
 bookie.exportBook = _.partial(exportImport.exportBook, bookie);
 bookie.exportAccount = _.partial(exportImport.exportAccount, bookie);
 bookie.exportVerification = _.partial(exportImport.exportVerification, bookie);

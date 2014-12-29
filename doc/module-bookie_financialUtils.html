@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Class: Account</title>
+    <title>JSDoc: Module: bookie/financialUtils</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Class: Account</h1>
+    <h1 class="page-title">Module: bookie/financialUtils</h1>
 
     
 
@@ -28,9 +28,8 @@
 
 <header>
     
-        <h2>
-        Account
-        </h2>
+        
+            
         
     
 </header>
@@ -39,24 +38,15 @@
     <div class="container-overview">
     
         
+
+        
+            
 <dt>
-    
-        
-        <h2>Constructor</h2>
-        
-
-        <h4 class="name" id="Account"><span class="type-signature"></span>new Account<span class="signature">(book, number, name)</span><span class="type-signature"></span></h4>
-
-        
     
 </dt>
 <dd>
 
     
-    <div class="description">
-        Represents an account in a bookkeeping <a href="Book.html">Book</a>.
-    </div>
-    
 
     
 
@@ -64,100 +54,6 @@
 
     
 
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>book</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type"><a href="Book.html">Book</a></span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The book that the account belongs to.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>number</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The account number. Should be unique in the context of the book.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>name</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The name (description) of the account. Should be unique in the context of the book.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
     
 
     
@@ -192,7 +88,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="account.js.html">account.js</a>, <a href="account.js.html#line16">line 16</a>
+        <a href="financial_financial-utils.js.html">financial/financial-utils.js</a>, <a href="financial_financial-utils.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -219,6 +115,7 @@
     
 </dd>
 
+        
     
     </div>
 
@@ -243,7 +140,7 @@
     
         
 
-        <h4 class="name" id="sumCredit"><span class="type-signature"></span>sumCredit<span class="signature">(from<span class="signature-attributes">nullable</span>, to<span class="signature-attributes">nullable</span>, filter<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+        <h4 class="name" id="priceOfVat"><span class="type-signature">(static) </span>priceOfVat<span class="signature">(vat, vatRate, priceIncludesVat<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
 
         
     
@@ -252,7 +149,7 @@
 
     
     <div class="description">
-        Sums all credit verifications in this account by the given date range and filter.
+        Calculates the price of the given VAT amount and VAT percent rate.
     </div>
     
 
@@ -280,6 +177,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -290,16 +189,13 @@
 
         <tr>
             
-                <td class="name"><code>from</code></td>
+                <td class="name"><code>vat</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">date</span>
-|
-
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -310,32 +206,31 @@
                 
 
                 
-                    &lt;nullable><br>
-                
 
                 
                 </td>
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">The lower inclusive bound of the range limit. Null means no lower range limit. If string, it will be parsed to a date.</td>
+            <td class="description last">The VAT amount to be used for calculating the price amount.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>to</code></td>
+                <td class="name"><code>vatRate</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">date</span>
-|
-
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -346,29 +241,31 @@
                 
 
                 
-                    &lt;nullable><br>
-                
 
                 
                 </td>
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">The higher inclusive bound of the range limit. Null means no higher range limit. If string, it will be parsed to a date.</td>
+            <td class="description last">The VAT percent rate to be used for calculating the price amount. Must be in the inclusive range 0 to 1.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>filter</code></td>
+                <td class="name"><code>priceIncludesVat</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -377,9 +274,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -387,8 +284,14 @@
             
 
             
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
 
-            <td class="description last">The filter function that also should be applied to filtering the verifications to be summed.</td>
+            <td class="description last">Tells if the given price already includes the VAT amount. If true, the price includes the VAT amount.</td>
         </tr>
 
     
@@ -428,7 +331,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="account.js.html">account.js</a>, <a href="account.js.html#line53">line 53</a>
+        <a href="financial_financial-utils.js.html">financial/financial-utils.js</a>, <a href="financial_financial-utils.js.html#line58">line 58</a>
     </li></ul></dd>
     
 
@@ -455,7 +358,7 @@
     
             
 <div class="param-desc">
-    The sum of all credit verifications that were filtered by the parameters.
+    The price amount of the given VAT amount and VAT percent rate. Returns null if parameters are invalid.
 </div>
 
 
@@ -483,7 +386,7 @@
     
         
 
-        <h4 class="name" id="sumDebit"><span class="type-signature"></span>sumDebit<span class="signature">(from<span class="signature-attributes">nullable</span>, to<span class="signature-attributes">nullable</span>, filter<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {number}</span></h4>
+        <h4 class="name" id="vatOfPrice"><span class="type-signature">(static) </span>vatOfPrice<span class="signature">(price, vatRate, priceIncludesVat<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; (nullable) {number}</span></h4>
 
         
     
@@ -492,7 +395,7 @@
 
     
     <div class="description">
-        Sums all debit verifications in this account by the given date range and filter.
+        Calculates the VAT amount by the given price and VAT percent.
     </div>
     
 
@@ -520,6 +423,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -530,16 +435,13 @@
 
         <tr>
             
-                <td class="name"><code>from</code></td>
+                <td class="name"><code>price</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">date</span>
-|
-
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -550,32 +452,31 @@
                 
 
                 
-                    &lt;nullable><br>
-                
 
                 
                 </td>
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">The lower inclusive bound of the range limit. Null means no lower range limit. If string, it will be parsed to a date.</td>
+            <td class="description last">The price to calculate the VAT amount of.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>to</code></td>
+                <td class="name"><code>vatRate</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">date</span>
-|
-
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
             
@@ -586,29 +487,31 @@
                 
 
                 
-                    &lt;nullable><br>
-                
 
                 
                 </td>
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">The higher inclusive bound of the range limit. Null means no higher range limit. If string, it will be parsed to a date.</td>
+            <td class="description last">The VAT percent rate to be used to calculate the VAT amount. Must be in the range 0 to 1 inclusive.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>filter</code></td>
+                <td class="name"><code>priceIncludesVat</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">function</span>
+<span class="param-type">boolean</span>
 
 
             
@@ -617,9 +520,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -627,8 +530,14 @@
             
 
             
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
 
-            <td class="description last">The filter function that also should be applied to filtering the verifications to be summed.</td>
+            <td class="description last">Tells if the given price already includes the VAT amount. If true, the price includes the VAT amount.</td>
         </tr>
 
     
@@ -668,7 +577,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="account.js.html">account.js</a>, <a href="account.js.html#line41">line 41</a>
+        <a href="financial_financial-utils.js.html">financial/financial-utils.js</a>, <a href="financial_financial-utils.js.html#line18">line 18</a>
     </li></ul></dd>
     
 
@@ -695,7 +604,253 @@
     
             
 <div class="param-desc">
-    The sum of all debit verifications that were filtered by the parameters.
+    The VAT amount by the given price at VAT percent. Returns null if parameters are invalid.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">number</span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+
+        <h4 class="name" id="vatRateOfPrice"><span class="type-signature">(static) </span>vatRateOfPrice<span class="signature">(price, vat, priceIncludesVat<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; (nullable) {number}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Calculates the VAT percent rate of the given price and VAT amount.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Attributes</th>
+        
+
+        
+        <th>Default</th>
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>price</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The price to be used for calculating the VAT percent rate.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>vat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The VAT amount to be used for calculating the VAT percent rate.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>priceIncludesVat</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    false
+                
+                </td>
+            
+
+            <td class="description last">Tells if the given price already includes the VAT amount. If true, the price includes the VAT amount.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="financial_financial-utils.js.html">financial/financial-utils.js</a>, <a href="financial_financial-utils.js.html#line38">line 38</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    The VAT percent rate of the given price and VAT amount. Returns null if parameters are invalid.
 </div>
 
 

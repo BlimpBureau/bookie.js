@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: bookie/date</title>
+    <title>JSDoc: Module: bookie/numberUtils</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: bookie/date</h1>
+    <h1 class="page-title">Module: bookie/numberUtils</h1>
 
     
 
@@ -88,7 +88,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line8">line 8</a>
+        <a href="financial_number-utils.js.html">financial/number-utils.js</a>, <a href="financial_number-utils.js.html#line8">line 8</a>
     </li></ul></dd>
     
 
@@ -140,7 +140,7 @@
     
         
 
-        <h4 class="name" id="isEqual"><span class="type-signature">(static) </span>isEqual<span class="signature">(date1, date2)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+        <h4 class="name" id="isDecimalPercent"><span class="type-signature">(static) </span>isDecimalPercent<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
         
     
@@ -149,7 +149,7 @@
 
     
     <div class="description">
-        Tells if two dates are equal.
+        Tells if the given value is a percent number in the inclusive range 0 to 1.
     </div>
     
 
@@ -185,16 +185,13 @@
 
         <tr>
             
-                <td class="name"><code>date1</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
+<span class="param-type">*</span>
 
 
             
@@ -204,33 +201,7 @@
 
             
 
-            <td class="description last">The first date to check for equality with the second date. If string, it will be parsed to a date.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>date2</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The second date to check for equality with the first date. If string, it will be parsed to a date.</td>
+            <td class="description last">The value to check if it is a percent range.</td>
         </tr>
 
     
@@ -270,7 +241,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line80">line 80</a>
+        <a href="financial_number-utils.js.html">financial/number-utils.js</a>, <a href="financial_number-utils.js.html#line64">line 64</a>
     </li></ul></dd>
     
 
@@ -297,7 +268,7 @@
     
             
 <div class="param-desc">
-    True if the given dates are equal. False if they are not equal or if any of the dates are invalid.
+    Returns true if the value is a percent range.
 </div>
 
 
@@ -325,7 +296,7 @@
     
         
 
-        <h4 class="name" id="isInsideDates"><span class="type-signature">(static) </span>isInsideDates<span class="signature">(date, from<span class="signature-attributes">nullable</span>, to<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+        <h4 class="name" id="isEqual"><span class="type-signature">(static) </span>isEqual<span class="signature">(number1, number2, epsilon<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
         
     
@@ -334,7 +305,7 @@
 
     
     <div class="description">
-        Tells if the given date is inside the given date range.
+        Tells if the given numbers are equal by the given precision.
     </div>
     
 
@@ -362,6 +333,8 @@
         
 
         
+        <th>Default</th>
+        
 
         <th class="last">Description</th>
     </tr>
@@ -372,16 +345,13 @@
 
         <tr>
             
-                <td class="name"><code>date</code></td>
+                <td class="name"><code>number1</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
+<span class="param-type">number</span>
 
 
             
@@ -398,24 +368,25 @@
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">The date to be checked if inside the date range. Will be parsed if string.</td>
+            <td class="description last">The number to be checked for equality to the second number.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>from</code></td>
+                <td class="name"><code>number2</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
+<span class="param-type">number</span>
 
 
             
@@ -426,32 +397,31 @@
                 
 
                 
-                    &lt;nullable><br>
-                
 
                 
                 </td>
             
 
             
+                <td class="default">
+                
+                </td>
+            
 
-            <td class="description last">The lower inclusive bound for the date range. No lower bound if null.</td>
+            <td class="description last">The number to be checked for equality to the first number.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>to</code></td>
+                <td class="name"><code>epsilon</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
+<span class="param-type">number</span>
 
 
             
@@ -460,9 +430,9 @@
             
                 <td class="attributes">
                 
-
+                    &lt;optional><br>
                 
-                    &lt;nullable><br>
+
                 
 
                 
@@ -470,8 +440,14 @@
             
 
             
+                <td class="default">
+                
+                    1e-6
+                
+                </td>
+            
 
-            <td class="description last">The higher inclusive bound for the date range. No higher bound if null.</td>
+            <td class="description last">The precision epsilon to be used while checking for equality.</td>
         </tr>
 
     
@@ -511,7 +487,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line99">line 99</a>
+        <a href="financial_number-utils.js.html">financial/number-utils.js</a>, <a href="financial_number-utils.js.html#line76">line 76</a>
     </li></ul></dd>
     
 
@@ -538,7 +514,7 @@
     
             
 <div class="param-desc">
-    True if the date is inside the given date range. False if not or if date is invalid.
+    True if all parameters are valid and the two numbers are equal given the epsilon.
 </div>
 
 
@@ -566,7 +542,7 @@
     
         
 
-        <h4 class="name" id="parse"><span class="type-signature">(static) </span>parse<span class="signature">(date)</span><span class="type-signature"> &rarr; (nullable) {date}</span></h4>
+        <h4 class="name" id="isValidNumber"><span class="type-signature">(static) </span>isValidNumber<span class="signature">(value)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
 
         
     
@@ -575,8 +551,7 @@
 
     
     <div class="description">
-        Parses the input into a date. The date will always be set to the time 00:00:00 GMT+0. Note that this discards the local timezone, so GMT+1 will still be 00:00:00.
-This function parses strings of the format YYYY-MM-dd where the first M or d is optional if it is 0.
+        Tells if the given value is of type number and is not NaN.
     </div>
     
 
@@ -612,16 +587,13 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
 
         <tr>
             
-                <td class="name"><code>date</code></td>
+                <td class="name"><code>value</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">date</span>
-|
-
-<span class="param-type">string</span>
+<span class="param-type">*</span>
 
 
             
@@ -631,7 +603,7 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
 
             
 
-            <td class="description last">The date to parse to a timeless `date` object. If date, the time part will simply be set to the specification. If string, it will be parsed to the given date.</td>
+            <td class="description last">The value to check if it is a valid number.</td>
         </tr>
 
     
@@ -671,7 +643,7 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line17">line 17</a>
+        <a href="financial_number-utils.js.html">financial/number-utils.js</a>, <a href="financial_number-utils.js.html#line54">line 54</a>
     </li></ul></dd>
     
 
@@ -698,7 +670,7 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
     
             
 <div class="param-desc">
-    The parsed date. If invalid input is given the function will return null.
+    Returns true if the value is a number and not NaN.
 </div>
 
 
@@ -709,7 +681,7 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
     </dt>
     <dd>
         
-<span class="param-type">date</span>
+<span class="param-type">boolean</span>
 
 
     </dd>
@@ -726,7 +698,7 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
     
         
 
-        <h4 class="name" id="stringify"><span class="type-signature">(static) </span>stringify<span class="signature">(date)</span><span class="type-signature"> &rarr; (nullable) {string}</span></h4>
+        <h4 class="name" id="round"><span class="type-signature">(static) </span>round<span class="signature">(number, decimals<span class="signature-attributes">opt</span>)</span><span class="type-signature"> &rarr; (nullable) {number}</span></h4>
 
         
     
@@ -735,7 +707,7 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
 
     
     <div class="description">
-        Serializes a date object to a string of the format YYYY-MM-dd.
+        Round the given number to the given number of decimals.
     </div>
     
 
@@ -759,7 +731,11 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
         <th>Type</th>
 
         
+        <th>Attributes</th>
+        
 
+        
+        <th>Default</th>
         
 
         <th class="last">Description</th>
@@ -771,26 +747,74 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
 
         <tr>
             
-                <td class="name"><code>date</code></td>
+                <td class="name"><code>number</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
+<span class="param-type">number</span>
 
 
             
             </td>
 
             
+                <td class="attributes">
+                
 
+                
+
+                
+                </td>
             
 
-            <td class="description last">The date to serialize. If string, it will be parsed as a date before serializing.</td>
+            
+                <td class="default">
+                
+                </td>
+            
+
+            <td class="description last">The number to be rounded.</td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>decimals</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">decimals</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+                <td class="default">
+                
+                    2
+                
+                </td>
+            
+
+            <td class="description last">The number of decimals to be used when rounding the number.</td>
         </tr>
 
     
@@ -830,7 +854,7 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line59">line 59</a>
+        <a href="financial_number-utils.js.html">financial/number-utils.js</a>, <a href="financial_number-utils.js.html#line17">line 17</a>
     </li></ul></dd>
     
 
@@ -857,7 +881,7 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
     
             
 <div class="param-desc">
-    The serialized string representation of the date. Null if invalid input.
+    The rounded number. Returns null if parameters are invalid.
 </div>
 
 
@@ -868,7 +892,7 @@ This function parses strings of the format YYYY-MM-dd where the first M or d is 
     </dt>
     <dd>
         
-<span class="param-type">string</span>
+<span class="param-type">number</span>
 
 
     </dd>
