@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: bookie/date</title>
+    <title>JSDoc: Class: ExtensionHandler</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: bookie/date</h1>
+    <h1 class="page-title">Class: ExtensionHandler</h1>
 
     
 
@@ -28,8 +28,9 @@
 
 <header>
     
-        
-            
+        <h2>
+        ExtensionHandler
+        </h2>
         
     
 </header>
@@ -38,14 +39,23 @@
     <div class="container-overview">
     
         
+<dt>
+    
+        
+        <h2>Constructor</h2>
+        
+
+        <h4 class="name" id="ExtensionHandler"><span class="type-signature"></span>new ExtensionHandler<span class="signature">()</span><span class="type-signature"></span></h4>
 
         
-            
-<dt>
     
 </dt>
 <dd>
 
+    
+    <div class="description">
+        Handles extensions of a <a href="Book.html">Book</a> instance.
+    </div>
     
 
     
@@ -88,7 +98,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line8">line 8</a>
+        <a href="extension_extension-handler.js.html">extension/extension-handler.js</a>, <a href="extension_extension-handler.js.html#line12">line 12</a>
     </li></ul></dd>
     
 
@@ -115,7 +125,6 @@
     
 </dd>
 
-        
     
     </div>
 
@@ -140,7 +149,7 @@
     
         
 
-        <h4 class="name" id="isEqual"><span class="type-signature">(static) </span>isEqual<span class="signature">(date1, date2)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+        <h4 class="name" id="callMethods"><span class="type-signature"></span>callMethods<span class="signature">(method, args)</span><span class="type-signature"></span></h4>
 
         
     
@@ -149,7 +158,7 @@
 
     
     <div class="description">
-        Tells if two dates are equal.
+        Calls all extension methods with given arguments by the given method name.
     </div>
     
 
@@ -185,16 +194,13 @@
 
         <tr>
             
-                <td class="name"><code>date1</code></td>
+                <td class="name"><code>method</code></td>
             
 
             <td class="type">
             
                 
 <span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
 
 
             
@@ -204,23 +210,20 @@
 
             
 
-            <td class="description last">The first date to check for equality with the second date. If string, it will be parsed to a date.</td>
+            <td class="description last">The method name to be called for all extensions that has it.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>date2</code></td>
+                <td class="name"><code>args</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
+<span class="param-type">Array</span>
 
 
             
@@ -230,7 +233,7 @@
 
             
 
-            <td class="description last">The second date to check for equality with the first date. If string, it will be parsed to a date.</td>
+            <td class="description last">The arguments array to be applied to all extension methods.</td>
         </tr>
 
     
@@ -270,7 +273,141 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line80">line 80</a>
+        <a href="extension_extension-handler.js.html">extension/extension-handler.js</a>, <a href="extension_extension-handler.js.html#line84">line 84</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+
+        <h4 class="name" id="get"><span class="type-signature"></span>get<span class="signature">(name)</span><span class="type-signature"></span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Gets the extension by the given extension name.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>name</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the extension to get.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extension_extension-handler.js.html">extension/extension-handler.js</a>, <a href="extension_extension-handler.js.html#line60">line 60</a>
     </li></ul></dd>
     
 
@@ -297,7 +434,310 @@
     
             
 <div class="param-desc">
-    True if the given dates are equal. False if they are not equal or if any of the dates are invalid.
+    The extension object with the given name. Returns null if it doesn't exist.
+</div>
+
+
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+
+        <h4 class="name" id="getMethods"><span class="type-signature"></span>getMethods<span class="signature">(method)</span><span class="type-signature"> &rarr; {Array.&lt;function()>}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Gets all extension methods that exists for the given method name.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>method</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The name of the methods that should be extracted from the extensions.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extension_extension-handler.js.html">extension/extension-handler.js</a>, <a href="extension_extension-handler.js.html#line70">line 70</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    A list of all extension methods that matched the given method name.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Array.&lt;function()></span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    
+        
+
+        <h4 class="name" id="isRegistered"><span class="type-signature"></span>isRegistered<span class="signature">(extension)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+
+        
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Tells if an extension has been registered to the extension handler.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>extension</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+|
+
+<span class="param-type"><a href="Extension.html">Extension</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">The extension to be checked if registered to the extension handler. If string, it will be used as name of the extension.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="extension_extension-handler.js.html">extension/extension-handler.js</a>, <a href="extension_extension-handler.js.html#line45">line 45</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    True if the extension has been registered.
 </div>
 
 
@@ -325,7 +765,7 @@
     
         
 
-        <h4 class="name" id="isInsideDates"><span class="type-signature">(static) </span>isInsideDates<span class="signature">(date, from<span class="signature-attributes">nullable</span>, to<span class="signature-attributes">nullable</span>)</span><span class="type-signature"> &rarr; {boolean}</span></h4>
+        <h4 class="name" id="register"><span class="type-signature"></span>register<span class="signature">(book, extension)</span><span class="type-signature"></span></h4>
 
         
     
@@ -334,7 +774,7 @@
 
     
     <div class="description">
-        Tells if the given date is inside the given date range.
+        Register an extension to the extension handler and inits it to the given book. All extensions in the extension handler context needs to have unique names.
     </div>
     
 
@@ -358,8 +798,6 @@
         <th>Type</th>
 
         
-        <th>Attributes</th>
-        
 
         
 
@@ -372,106 +810,46 @@
 
         <tr>
             
-                <td class="name"><code>date</code></td>
+                <td class="name"><code>book</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
+<span class="param-type"><a href="Book.html">Book</a></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">The date to be checked if inside the date range. Will be parsed if string.</td>
+            <td class="description last">The book that the given extension should be applied to.</td>
         </tr>
 
     
 
         <tr>
             
-                <td class="name"><code>from</code></td>
+                <td class="name"><code>extension</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
+<span class="param-type"><a href="Extension.html">Extension</a></span>
 
 
             
             </td>
 
             
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
 
             
 
-            <td class="description last">The lower inclusive bound for the date range. No lower bound if null.</td>
-        </tr>
-
-    
-
-        <tr>
-            
-                <td class="name"><code>to</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
-
-
-            
-            </td>
-
-            
-                <td class="attributes">
-                
-
-                
-                    &lt;nullable><br>
-                
-
-                
-                </td>
-            
-
-            
-
-            <td class="description last">The higher inclusive bound for the date range. No higher bound if null.</td>
+            <td class="description last">The extension to be used.</td>
         </tr>
 
     
@@ -511,7 +889,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line99">line 99</a>
+        <a href="extension_extension-handler.js.html">extension/extension-handler.js</a>, <a href="extension_extension-handler.js.html#line23">line 23</a>
     </li></ul></dd>
     
 
@@ -532,349 +910,20 @@
     
 
     
-
-    
-    <h5>Returns:</h5>
+    <h5>Throws:</h5>
     
             
-<div class="param-desc">
-    True if the date is inside the given date range. False if not or if date is invalid.
-</div>
 
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">boolean</span>
-
-
-    </dd>
-</dl>
-
-        
-
+    <div class="param-desc">
     
-</dd>
-
-        
-            
-<dt>
+        On invalid extension input (bad extension format or not unique name).
     
-        
-
-        <h4 class="name" id="parse"><span class="type-signature">(static) </span>parse<span class="signature">(date)</span><span class="type-signature"> &rarr; (nullable) {date}</span></h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Parses the input into a date. The date will always be set to the time 00:00:00 GMT+0. Note that this discards the local timezone, so GMT+1 will still be 00:00:00.
-This function parses strings of the format YYYY-MM-dd where the first M or d is optional if it is 0.
     </div>
-    
 
-    
-
-    
-
-    
-
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>date</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">date</span>
-|
-
-<span class="param-type">string</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The date to parse to a timeless `date` object. If date, the time part will simply be set to the specification. If string, it will be parsed to the given date.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line17">line 17</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The parsed date. If invalid input is given the function will return null.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">date</span>
-
-
-    </dd>
-</dl>
 
         
 
     
-</dd>
-
-        
-            
-<dt>
-    
-        
-
-        <h4 class="name" id="stringify"><span class="type-signature">(static) </span>stringify<span class="signature">(date)</span><span class="type-signature"> &rarr; (nullable) {string}</span></h4>
-
-        
-    
-</dt>
-<dd>
-
-    
-    <div class="description">
-        Serializes a date object to a string of the format YYYY-MM-dd.
-    </div>
-    
-
-    
-
-    
-
-    
-
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-    <tr>
-        
-        <th>Name</th>
-        
-
-        <th>Type</th>
-
-        
-
-        
-
-        <th class="last">Description</th>
-    </tr>
-    </thead>
-
-    <tbody>
-    
-
-        <tr>
-            
-                <td class="name"><code>date</code></td>
-            
-
-            <td class="type">
-            
-                
-<span class="param-type">string</span>
-|
-
-<span class="param-type">date</span>
-
-
-            
-            </td>
-
-            
-
-            
-
-            <td class="description last">The date to serialize. If string, it will be parsed as a date before serializing.</td>
-        </tr>
-
-    
-    </tbody>
-</table>
-    
-
-    
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="date_date-utils.js.html">date/date-utils.js</a>, <a href="date_date-utils.js.html#line59">line 59</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <h5>Returns:</h5>
-    
-            
-<div class="param-desc">
-    The serialized string representation of the date. Null if invalid input.
-</div>
-
-
-
-<dl>
-    <dt>
-        Type
-    </dt>
-    <dd>
-        
-<span class="param-type">string</span>
-
-
-    </dd>
-</dl>
-
-        
 
     
 </dd>

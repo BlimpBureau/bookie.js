@@ -37,17 +37,9 @@ var Account = require("./account.js");
 var Verification = require("./verification.js");
 var FiscalYear = require("./fiscal-year.js");
 var dateUtils = require("./date/date-utils.js");
+var ExtensionHandler = require("./extension/extension-handler");
 
 module.exports = Book;
-
-/**
- * @typedef Extension
- * @type {object}
- * @property {string} name - The name of the extension. Must be unique in the context of used extensions in this book.
- * @property {function} apply - The function to be called to apply the extension.
- * @property {function=} createVerification - The function to be called in the process of creating a {@link Verification}.
- * @property {function=} createFiscalYear - The function to be called in the process of creating a {@link FiscalYear}.
- */
 
 /**
  * Creates a bookkeeping book that holds verifications on account changes.
@@ -55,14 +47,14 @@ module.exports = Book;
  * @public
  */
 function Book() {
+    this.extensionHandler = new ExtensionHandler();
+
     //The accounts of the book are stored as the account number as key.
     this.accounts = {};
 
     //The array of verifications. Verification number is key.
     this.verifications = {};
     this.numVerifications = 0;
-
-    this.extensions = {};
 
     this.classifiers = {};
 
@@ -76,35 +68,27 @@ function Book() {
  * @returns {Book} This book instance for chaining.
  */
 Book.prototype.use = function(extension) {
-    if(!_.isObject(extension) || !_.isString(extension.name) || !_.isFunction(extension.apply)) {
-        throw new Error("Invalid extension");
-    }
-
-    var name = extension.name;
-
-    if(this.extensions[name]) {
-        throw new Error("Extension " + name + " already applied to this book.");
-    }
-
-    this.extensions[name] = extension;
-
-    extension.apply(this);
-
+    this.extensionHandler.register(this, extension);
     return this;
 };
 
 /**
  * Tells if an extension is being used by this book.
  * @public
- * @param {string} name The named of the extension to check if being used.
- * @returns {boolean} True if the extension by given name is being used. False otherwise.
+ * @param {string|Extension} extension The extension to be checked if being used. If string, it will be used as name of the extension.
+ * @returns {boolean} True if the extension is being used in this book.
  */
-Book.prototype.using = function(name) {
-    if(!_.isString(name)) {
-        throw new Error("Invalid extension name");
-    }
+Book.prototype.using = function(extension) {
+    return this.extensionHandler.isRegistered(extension);
+};
 
-    return !!this.extensions[name];
+/**
+ * Gets the extension by the given extension name.
+ * @param {string} name The name of the extension to get.
+ * @returns The extension object with the given name. Returns null if it doesn't exist.
+ */
+Book.prototype.getExtension = function(name) {
+    return this.extensionHandler.get(name);
 };
 
 /**
@@ -165,9 +149,7 @@ Book.prototype.createVerification = function(date, text) {
     args.splice(0, 2);
     args.unshift(verification);
 
-    _.forEach(this.extensions, function(extension) {
-        (extension.createVerification || _.noop).apply(null, args);
-    });
+    this.extensionHandler.callMethods("createVerification", args);
 
     return verification;
 };
@@ -299,10 +281,8 @@ Book.prototype.doctor = function() {
     result = result.concat(unbalancedVerifications(this.verifications));
     result = result.concat(verificationsOutOfFiscalYears(this.verifications, this.fiscalYears));
 
-    _.forEach(this.extensions, function(extension) {
-        if(extension.doctor) {
-            result = result.concat(extension.doctor(this));
-        }
+    _.forEach(this.extensionHandler.getMethods("doctor"), function(method) {
+        result = result.concat(method(this));
     });
 
     return result;
@@ -331,9 +311,7 @@ Book.prototype.createFiscalYear = function(from, to) {
     args.splice(0, 2);
     args.unshift(fiscalYear);
 
-    _.forEach(this.extensions, function(extension) {
-        (extension.createFiscalYear || _.noop).apply(null, args);
-    });
+    this.extensionHandler.callMethods("createFiscalYear", args);
 
     if(!this.fiscalYears.length) {
         this.fiscalYears.push(fiscalYear);
@@ -394,13 +372,13 @@ Book.prototype.getLastFiscalYear = function() {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-bookie.html">bookie</a></li><li><a href="module-bookie_date.html">bookie/date</a></li><li><a href="module-bookie_financialUtils.html">bookie/financialUtils</a></li><li><a href="module-bookie_numberUtils.html">bookie/numberUtils</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Book.html">Book</a></li><li><a href="FiscalYear.html">FiscalYear</a></li><li><a href="Verification.html">Verification</a></li></ul><h3><a href="global.html">Global</a></h3>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-bookie.html">bookie</a></li><li><a href="module-bookie_date.html">bookie/date</a></li><li><a href="module-bookie_financialUtils.html">bookie/financialUtils</a></li><li><a href="module-bookie_numberUtils.html">bookie/numberUtils</a></li></ul><h3>Classes</h3><ul><li><a href="Account.html">Account</a></li><li><a href="Book.html">Book</a></li><li><a href="Extension.html">Extension</a></li><li><a href="ExtensionHandler.html">ExtensionHandler</a></li><li><a href="FiscalYear.html">FiscalYear</a></li><li><a href="Verification.html">Verification</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Mon Dec 29 2014 22:03:27 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha11</a> on Tue Dec 30 2014 17:54:48 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

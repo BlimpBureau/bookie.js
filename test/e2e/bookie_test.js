@@ -86,105 +86,11 @@ describe("bookie.js", function() {
             it("should be defined", function() {
                 expect(book.use).to.be.a("function");
             });
-
-            it("should register extensions", function() {
-                var spy = sinon.spy();
-
-                var extension = {
-                    name: "test",
-                    apply: spy
-                };
-
-                book.use(extension);
-
-                expect(spy).to.have.been.calledOnce;
-                expect(spy).to.have.been.calledWith(book);
-                expect(book.extensions.test).to.equal(extension);
-            });
-
-            it("should throw on using already applied extension", function() {
-                var spy = sinon.spy();
-
-                var extension = {
-                    name: "test",
-                    apply: spy
-                };
-
-                book.use(extension);
-
-                expect(spy).to.have.been.calledOnce;
-
-                expect(function() {
-                    book.use(extension);
-                }).to.throw(Error);
-
-                expect(spy).to.have.been.calledOnce;
-            });
-
-            it("should throw on invalid extension", function() {
-                var spy = sinon.spy();
-
-                expect(function() {
-                    book.use();
-                }).to.throw(Error);
-
-                expect(function() {
-                    book.use(true);
-                }).to.throw(Error);
-
-                expect(function() {
-                    book.use({
-                        foo: "bar"
-                    });
-                }).to.throw(Error);
-
-                expect(function() {
-                    book.use({
-                        name: true,
-                        apply: spy
-                    });
-                }).to.throw(Error);
-                expect(spy).to.not.have.been.called;
-
-                expect(function() {
-                    book.use({
-                        name: "test",
-                        apply: true
-                    });
-                }).to.throw(Error);
-            });
+            //TODO: Make sure it passes the right book into the delegated extensionHandler method and returns the book instance.
         });
 
         describe("using", function() {
-            it("should be defined", function() {
-                var book = new bookie.Book();
-
-                expect(book.using).to.be.a("function");
-            });
-
-            it("return boolean indicating using of a extension name", function() {
-                var book = new bookie.Book();
-
-                expect(book.using("")).to.equal(false);
-                expect(book.using("test")).to.equal(false);
-
-                book.use({
-                    name: "test",
-                    apply: _.noop
-                });
-
-                expect(book.using("test")).to.equal(true);
-                expect(book.using("test2")).to.equal(false);
-
-                book.use({
-                    name: "test2",
-                    apply: _.noop
-                });
-
-                expect(book.using("test")).to.equal(true);
-                expect(book.using("test2")).to.equal(true);
-                expect(book.using("")).to.equal(false);
-            });
+            //TODO: Just make sure the method is defined. Already tested by extension handler.
         });
 
         describe("FiscalYears", function() {
@@ -246,16 +152,16 @@ describe("bookie.js", function() {
                     }).to.throw(Error);
                 });
 
-                it("should apply extensions", function() {
+                it("should init extensions", function() {
                     var spy = sinon.spy();
 
                     book.use({
                         name: "test with no method",
-                        apply: function() {}
+                        init: function() {}
                     })
                     .use({
                         name: "test with method",
-                        apply: function() {},
+                        init: function() {},
                         createFiscalYear: spy
                     });
 
@@ -378,11 +284,11 @@ describe("bookie.js", function() {
 
                     book.use({
                         name: "test with no method",
-                        apply: function() {}
+                        init: function() {}
                     })
                     .use({
                         name: "test with method",
-                        apply: function() {},
+                        init: function() {},
                         createVerification: spy
                     });
 
@@ -932,11 +838,11 @@ describe("bookie.js", function() {
                 book
                 .use({
                     name: "extension-test",
-                    apply: function() {}
+                    init: function() {}
                 })
                 .use({
                     name: "test åäö",
-                    apply: function() {}
+                    init: function() {}
                 });
 
                 object = bookie.exportBook(book);

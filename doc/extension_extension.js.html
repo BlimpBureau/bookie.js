@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Home</title>
+    <title>JSDoc: Source: extension/extension.js</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,32 +17,43 @@
 
 <div id="main">
 
-    <h1 class="page-title">Home</h1>
+    <h1 class="page-title">Source: extension/extension.js</h1>
 
     
 
 
 
     
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>"use strict";
 
+var _ = require("lodash");
 
-    <h3> </h3>
+module.exports = Extension;
 
+/**
+ * Represents an extension that will be applied to bookkeeping {@link Book}'s.
+ * @constructor
+ * @public
+ * @param {string} name - The name of the extension. Must be unique in the context of used extensions in a {@link Book}.
+ * @param {function=} init - The function to be called to init the extension to the given {@link Book}.
+ */
+function Extension(name, init) {
+    this.name = name;
+    this.init = init || _.noop;
+}
 
-
-
-
-
-
-
-
-
-    
-
-
-
-
-
+/**
+ * Inits the extension to the given book. Here extensions can alter properties and methods to the given {@link Book}. This method should be overriden by extensions.
+ * @param {Book} book - The book that this extension should be applied to.
+ */
+Extension.prototype.init = function(book) {
+    this.init(book);
+};
+</code></pre>
+        </article>
+    </section>
 
 
 

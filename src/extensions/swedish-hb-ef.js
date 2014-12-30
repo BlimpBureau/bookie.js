@@ -7,7 +7,7 @@ var _ = require("lodash");
 module.exports = function(options) {
     return {
         name: "SwedishHBEF",
-        apply: _.partial(apply, options),
+        init: _.partial(init, options),
         createVerification: createVerification,
         createFiscalYear: createFiscalYear,
         types: types
@@ -24,7 +24,7 @@ var types = {
     ownCapital: "Eget kapital"
 };
 
-function apply(options, book) {
+function init(options, book) {
     options = options || {};
     var owners = options.owners || [];
 

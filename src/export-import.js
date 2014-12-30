@@ -95,7 +95,7 @@ function exportBook(bookie, book, skipHeader) {
         return exportVerification(bookie, verification, true);
     });
 
-    output.extensions = _.map(book.extensions, function(extension) {
+    output.extensions = _.map(book.extensionHandler.extensions, function(extension) {
         return extension.name;
     });
 

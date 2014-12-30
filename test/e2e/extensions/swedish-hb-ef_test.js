@@ -49,10 +49,10 @@ describe("SwedishHBEF", function() {
     it("should be defined", function() {
         expect(bookieSwedishHBEF).to.be.a("function");
         expect(bookieSwedishHBEF().name).to.equal("SwedishHBEF");
-        expect(bookieSwedishHBEF().apply).to.be.a("function");
+        expect(bookieSwedishHBEF().init).to.be.a("function");
     });
 
-    describe("apply", function() {
+    describe("init", function() {
         var book;
 
         beforeEach(function() {
@@ -69,7 +69,7 @@ describe("SwedishHBEF", function() {
             expect(book.getAccount(2010).name).to.equal("Eget kapital");
             expect(book.getAccount(2020)).to.equal(null);
             expect(book.owners).to.eql([]);
-            expect(book.extensions.SwedishHBEF.types.ownCapital).to.equal("Eget kapital");
+            expect(book.getExtension("SwedishHBEF").types.ownCapital).to.equal("Eget kapital");
         });
 
         it("should respond to owners option", function() {
@@ -84,14 +84,14 @@ describe("SwedishHBEF", function() {
             expect(book.getAccount(2030)).to.equal(null);
 
             expect(book.owners).to.eql(owners);
-            expect(book.extensions.SwedishHBEF.types.ownCapital).to.equal("Eget kapital");
-            expect(book.extensions.SwedishHBEF.types.ownCapitalOwner1).to.equal("Eget kapital John");
-            expect(book.extensions.SwedishHBEF.types.ownCapitalOwner2).to.equal("Eget kapital Jane");
-            expect(book.classifiers[book.extensions.SwedishHBEF.types.ownCapitalOwner1]).to.be.an("array");
-            expect(book.classifiers[book.extensions.SwedishHBEF.types.ownCapitalOwner2]).to.be.an("array");
+            expect(book.getExtension("SwedishHBEF").types.ownCapital).to.equal("Eget kapital");
+            expect(book.getExtension("SwedishHBEF").types.ownCapitalOwner1).to.equal("Eget kapital John");
+            expect(book.getExtension("SwedishHBEF").types.ownCapitalOwner2).to.equal("Eget kapital Jane");
+            expect(book.classifiers[book.getExtension("SwedishHBEF").types.ownCapitalOwner1]).to.be.an("array");
+            expect(book.classifiers[book.getExtension("SwedishHBEF").types.ownCapitalOwner2]).to.be.an("array");
 
-            expect(book.getAccounts(book.extensions.SwedishHBEF.types.ownCapitalOwner1)).to.eql([book.getAccount(2010)]);
-            expect(book.getAccounts(book.extensions.SwedishHBEF.types.ownCapitalOwner2)).to.eql([book.getAccount(2020)]);
+            expect(book.getAccounts(book.getExtension("SwedishHBEF").types.ownCapitalOwner1)).to.eql([book.getAccount(2010)]);
+            expect(book.getAccounts(book.getExtension("SwedishHBEF").types.ownCapitalOwner2)).to.eql([book.getAccount(2020)]);
         });
     });
 
