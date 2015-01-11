@@ -13,7 +13,7 @@ var numberUtils = module.exports;
  * @param {number} number The number to be rounded.
  * @param {decimals} [decimals=2] The number of decimals to be used when rounding the number.
  * @returns {?number} The rounded number.
- * @throws On invalid number.
+ * @throws On invalid number and invalid decimals.
  */
 numberUtils.round = function(number, decimals) {
     function roundToDecimals(number, exp) {
