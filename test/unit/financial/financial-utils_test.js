@@ -20,9 +20,13 @@ describe("financialUtils", function() {
             expect(financialUtils.vatOfPrice(100, 0.25, true)).to.equal(20);
         });
 
-        it("should return null on invalid input", function() {
-            expect(financialUtils.vatOfPrice(false, 0.25)).to.equal(null);
-            expect(financialUtils.vatOfPrice(124, NaN)).to.equal(null);
+        it("should throw on invalid input", function() {
+            expect(function() {
+                financialUtils.vatOfPrice(false, 0.25);
+            }).to.throw();
+            expect(function() {
+                financialUtils.vatOfPrice(124, NaN);
+            }).to.throw();
         });
     });
 
@@ -39,9 +43,13 @@ describe("financialUtils", function() {
             expect(financialUtils.vatRateOfPrice(100, 20, true)).to.equal(0.25);
         });
 
-        it("should return null on invalid input", function() {
-            expect(financialUtils.vatRateOfPrice(false, 0.25)).to.equal(null);
-            expect(financialUtils.vatRateOfPrice(124, NaN)).to.equal(null);
+        it("should throw on invalid input", function() {
+            expect(function() {
+                financialUtils.vatRateOfPrice(false, 0.25);
+            }).to.throw();
+            expect(function() {
+                financialUtils.vatRateOfPrice(124, NaN);
+            }).to.throw();
         });
     });
 
@@ -59,9 +67,13 @@ describe("financialUtils", function() {
             expect(financialUtils.priceOfVat(10, 0.1, true)).to.equal(110);
         });
 
-        it("should return null on invalid input", function() {
-            expect(financialUtils.priceOfVat(false, 0.25)).to.equal(null);
-            expect(financialUtils.priceOfVat(124, NaN)).to.equal(null);
+        it("should throw on invalid input", function() {
+            expect(function() {
+                financialUtils.priceOfVat(false, 0.25);
+            }).to.throw();
+            expect(function() {
+                financialUtils.priceOfVat(124, NaN);
+            }).to.throw();
         });
     });
 });
