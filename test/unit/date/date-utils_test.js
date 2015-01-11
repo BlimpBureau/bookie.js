@@ -71,9 +71,13 @@ describe("dateUtils", function() {
             expect(dateUtils.stringify("1991-1-05")).to.equal("1991-01-05");
         });
 
-        it("should return null on invalid input", function() {
-            expect(dateUtils.stringify()).to.equal(null);
-            expect(dateUtils.stringify(true)).to.equal(null);
+        it("should throw on invalid input", function() {
+            expect(function() {
+                dateUtils.stringify();
+            }).to.throw();
+            expect(function() {
+                dateUtils.stringify(true);
+            }).to.throw();
         });
     });
 

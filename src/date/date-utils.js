@@ -54,13 +54,14 @@ dateUtils.parse = function(date) {
  * Serializes a date object to a string of the format YYYY-MM-dd.
  * @public
  * @param {string|date} date The date to serialize. If string, it will be parsed as a date before serializing.
- * @returns {?string} The serialized string representation of the date. Null if invalid input.
+ * @returns {?string} The serialized string representation of the date.
+ * @throws On invalid input date.
  */
 dateUtils.stringify = function(date) {
     date = dateUtils.parse(date);
 
-    if(!date) {
-        return null;
+    if(!_.isDate(date)) {
+        throw new Error("Invalid date.");
     }
 
     var d = date.getDate();
@@ -94,7 +95,8 @@ dateUtils.isEqual = function(date1, date2) {
  * @param {string|date} date The date to be checked if inside the date range. Will be parsed if string.
  * @param {?(string|date)} from The lower inclusive bound for the date range. No lower bound if null.
  * @param {?(string|date)} to The higher inclusive bound for the date range. No higher bound if null.
- * @returns {boolean} True if the date is inside the given date range. False if not or if date is invalid.
+ * @returns {boolean} True if the date is inside the given date range.
+ * @throws On invalid input date.
  */
 dateUtils.isInsideDates = function(date, from, to) {
     date = dateUtils.parse(date);
