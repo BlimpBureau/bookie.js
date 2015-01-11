@@ -54,7 +54,7 @@ dateUtils.parse = function(date) {
  * Serializes a date object to a string of the format YYYY-MM-dd.
  * @public
  * @param {string|date} date The date to serialize. If string, it will be parsed as a date before serializing.
- * @returns {?string} The serialized string representation of the date.
+ * @returns {string} The serialized string representation of the date.
  * @throws On invalid input date.
  */
 dateUtils.stringify = function(date) {
