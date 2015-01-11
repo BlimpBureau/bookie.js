@@ -68,10 +68,16 @@ describe("numberUtils", function() {
             expect(numberUtils.round(1031313124120102401204102412401204114124124125125151251251202.1399, 3)).to.equal(1031313124120102401204102412401204114124124125125151251251202.14);
         });
 
-        it("should return null on invalid arguments", function() {
-            expect(numberUtils.round(true)).to.equal(null);
-            expect(numberUtils.round(new Date())).to.equal(null);
-            expect(numberUtils.round(13, 13.37)).to.equal(null);
+        it("should throw on invalid number and decimal", function() {
+            expect(function() {
+                numberUtils.round(true);
+            }).to.throw();
+            expect(function() {
+                numberUtils.round(new Date());
+            }).to.throw();
+            expect(function() {
+                numberUtils.round(13, 13.37);
+            }).to.throw();
         });
     });
 });

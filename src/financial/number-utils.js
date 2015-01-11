@@ -12,7 +12,8 @@ var numberUtils = module.exports;
  * @public
  * @param {number} number The number to be rounded.
  * @param {decimals} [decimals=2] The number of decimals to be used when rounding the number.
- * @returns {?number} The rounded number. Returns null if parameters are invalid.
+ * @returns {?number} The rounded number.
+ * @throws On invalid number.
  */
 numberUtils.round = function(number, decimals) {
     function roundToDecimals(number, exp) {
@@ -24,7 +25,7 @@ numberUtils.round = function(number, decimals) {
         }
 
         if(exp % 1 !== 0) {
-            return null; //Decimals must be an integer.
+            throw new Error("Invalid decimals. Must be an integer.");
         }
 
         // Shift
@@ -37,7 +38,7 @@ numberUtils.round = function(number, decimals) {
     }
 
     if(!numberUtils.isValidNumber(number)) {
-        return null;
+        throw new Error("Invalid number");
     }
 
     var d = _.isNumber(decimals) ? decimals : 2;
