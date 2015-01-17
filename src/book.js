@@ -20,7 +20,7 @@ module.exports = Book;
  */
 function Book() {
     this.extensionHandler = new ExtensionHandler();
-    this.FiscalYearHandler = new FiscalYearHandler();
+    this.fiscalYearHandler = new FiscalYearHandler();
 
     //The accounts of the book are stored as the account number as key.
     this.accounts = {};
@@ -117,8 +117,8 @@ Book.prototype.createVerification = function(date, text) {
 
     //Let the extensions do their work on the verification before returning it.
     var args = Array.prototype.slice.call(arguments);
-    args.splice(0, 2);
     args.unshift(verification);
+    args.unshift(this);
 
     this.extensionHandler.callMethods("createVerification", args);
 
@@ -272,10 +272,13 @@ Book.prototype.export = function() {
  * @throws If an invalid date range is give.
  */
 Book.prototype.createFiscalYear = function(from, to) {
-    var fiscalYear = fiscalYearHandler.create(from, to);
+    var fiscalYear = this.fiscalYearHandler.create(from, to);
 
     //Let the extensions do their work on the fiscal year.
-    this.extensionHandler.callMethods("createFiscalYear", [fiscalYear, from, to]);
+    var args = Array.prototype.slice.call(arguments);
+    args.unshift(fiscalYear);
+    args.unshift(this);
+    this.extensionHandler.callMethods("createFiscalYear", args);
 
     return fiscalYear;
 };

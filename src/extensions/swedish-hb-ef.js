@@ -149,8 +149,8 @@ function init(options, book) {
     book.owners = owners;
 }
 
-function createVerification(verification, owners) {
-    verification.owners = parseOwnersShare(verification.book, owners);
+function createVerification(book, verification, date, text, owners) {
+    verification.owners = parseOwnersShare(book, owners);
 }
 
 function parseOwnersShare(book, ownersObject) {
@@ -204,9 +204,9 @@ function parseOwnersShare(book, ownersObject) {
     return owners;
 }
 
-function createFiscalYear(fiscalYear) {
+function createFiscalYear(book, fiscalYear) {
     fiscalYear.isEnded = function() {
-        var verifications = this.book.getVerifications(this.to, this.to);
+        var verifications = book.getVerifications(this.to, this.to);
 
         return _.find(verifications, function(verification) {
             return verification.touches(8999);

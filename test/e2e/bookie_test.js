@@ -101,10 +101,7 @@ describe("bookie.js", function() {
                 });
 
                 it("should call extensions", function() {
-                    //TODO
-                })
-
-                it("should init extensions", function() {
+                    var book = new bookie.Book();
                     var spy = sinon.spy();
 
                     book.use({
@@ -120,7 +117,7 @@ describe("bookie.js", function() {
                     var fy = book.createFiscalYear("2012-01-01", "2012-12-31", { test: "hello" }, true);
 
                     expect(spy).to.have.been.calledOnce;
-                    expect(spy).to.have.been.calledWith(fy, { test: "hello" }, true);
+                    expect(spy).to.have.been.calledWith(book, fy, "2012-01-01", "2012-12-31", { test: "hello" }, true);
                 });
             });
 
@@ -201,7 +198,7 @@ describe("bookie.js", function() {
                     var v = book.createVerification("2012-01-02", "test", { test: "hello" }, true);
 
                     expect(spy).to.have.been.calledOnce;
-                    expect(spy).to.have.been.calledWith(v, { test: "hello" }, true);
+                    expect(spy).to.have.been.calledWith(book, v, "2012-01-02", "test", { test: "hello" }, true);
                 });
             });
 
