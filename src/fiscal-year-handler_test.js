@@ -1,9 +1,10 @@
+/* global describe: false, it: false, expect: false */
 /* jshint expr: true */
 
 "use strict";
 
-var dateUtils = require("../../src/date/date-utils");
-var FiscalYearHandler = require("../../src/fiscal-year-handler");
+var dateUtils = require("./date/date-utils");
+var FiscalYearHandler = require("./fiscal-year-handler");
 
 describe("FiscalYearHandler", function() {
     describe("create", function() {

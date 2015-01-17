@@ -1,6 +1,8 @@
+/* global describe: false, it: false, expect: false */
+
 "use strict";
 
-var financialUtils = require("../../../src/financial/financial-utils");
+var financialUtils = require("./financial-utils");
 
 describe("financialUtils", function() {
     describe("vatOfPrice", function() {

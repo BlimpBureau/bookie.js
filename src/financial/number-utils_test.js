@@ -1,6 +1,8 @@
+/* global describe: false, it: false, expect: false */
+
 "use strict";
 
-var numberUtils = require("../../../src/financial/number-utils.js");
+var numberUtils = require("./number-utils.js");
 
 describe("numberUtils", function() {
     describe("isValidNumber", function() {

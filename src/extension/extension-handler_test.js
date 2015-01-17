@@ -1,8 +1,9 @@
+/* global describe: false, it: false, expect: false, _: false, sinon: false */
 /* jshint expr: true */
 
 "use strict";
 
-var ExtensionHandler = require("../../../src/extension/extension-handler");
+var ExtensionHandler = require("./extension-handler");
 
 describe("ExtensionHandler", function() {
     describe("register", function() {

@@ -80,28 +80,28 @@ module.exports = function(grunt) {
             }
         },
         mochaTest: {
-            unit: {
+            src: {
                 options: {
                     reporter: "spec",
-                    require: ["test/setup-mocha.js"]
+                    require: ["./setup-mocha.js"]
                 },
-                src: "test/unit/**/*_test.js"
+                src: "src/**/*_test.js"
             },
-            e2e: {
+            test: {
                 options: {
                     reporter: "spec",
-                    require: ["test/setup-mocha.js"]
+                    require: ["./setup-mocha.js", "./test/setup-test.js"]
                 },
-                src: "test/e2e/**/*_test.js"
+                src: "test/**/*_test.js"
             },
             coverage: {
                 options: {
                     reporter: "html-cov",
-                    require: ["test/setup-mocha.js"],
+                    require: ["./setup-mocha.js", "./test/setup-test.js"],
                     quiet: true,
                     captureFile: "coverage.html"
                 },
-                src: "test/**/*_test.js"
+                src: ["test/**/*_test.js", "src/**/*_test.js"]
             }
         },
         karma: {
@@ -190,7 +190,7 @@ module.exports = function(grunt) {
     grunt.registerTask("build", ["browserify", "jsdoc"]);
     grunt.registerTask("dist", ["copy:dist", "uglify:dist", "usebanner:dist"]);
 
-    grunt.registerTask("test:unit", ["mochaTest:unit"]);
+    grunt.registerTask("test:src", ["mochaTest:src"]);
     grunt.registerTask("test:local", ["build", "karma:local"]);
     grunt.registerTask("test:sauce", ["build", "checkSauceConnectEnv"].concat(sauceBrowserTasks));
 

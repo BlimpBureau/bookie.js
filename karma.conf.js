@@ -18,8 +18,8 @@ module.exports = function(config) {
             "node_modules/sinon/pkg/sinon.js",
             "build/bookie.js",
             "build/bookie-swedish-hb-ef.js",
-            "test/setup-karma.js",
-            "test/e2e/**/*_test.js"
+            "setup-karma.js",
+            "test/**/*_test.js"
         ],
 
         // list of files to exclude
