@@ -7,9 +7,9 @@
 var _ = require("lodash");
 var Account = require("./account.js");
 var Verification = require("./verification.js");
-var FiscalYear = require("./fiscal-year.js");
 var dateUtils = require("./date/date-utils.js");
 var ExtensionHandler = require("./extension/extension-handler");
+var FiscalYearHandler = require("./fiscal-year-handler");
 
 module.exports = Book;
 
@@ -20,6 +20,7 @@ module.exports = Book;
  */
 function Book() {
     this.extensionHandler = new ExtensionHandler();
+    this.FiscalYearHandler = new FiscalYearHandler();
 
     //The accounts of the book are stored as the account number as key.
     this.accounts = {};
@@ -29,8 +30,6 @@ function Book() {
     this.numVerifications = 0;
 
     this.classifiers = {};
-
-    this.fiscalYears = [];
 }
 
 /**
@@ -251,7 +250,7 @@ Book.prototype.doctor = function() {
     var result = [];
 
     result = result.concat(unbalancedVerifications(this.verifications));
-    result = result.concat(verificationsOutOfFiscalYears(this.verifications, this.fiscalYears));
+    result = result.concat(verificationsOutOfFiscalYears(this.verifications, this.fiscalYearHandler.getAll()));
 
     _.forEach(this.extensionHandler.getMethods("doctor"), function(method) {
         result = result.concat(method(this));
@@ -270,35 +269,13 @@ Book.prototype.export = function() {
  * @param {date|string} from The lower inclusive bound of the fiscal year. If string, it will be parsed to a date.
  * @param {data|string} to The higher inclusive bound of the fiscal year. If string, it will be parsed to a date.
  * @returns {FiscalYear} The created fiscal year.
+ * @throws If an invalid date range is give.
  */
 Book.prototype.createFiscalYear = function(from, to) {
-    function oneDayDiff(first, second) {
-        return (first.getTime() - second.getTime()) / (1000 * 60 * 60 * 24) === 1;
-    }
+    var fiscalYear = fiscalYearHandler.create(from, to);
 
-    var fiscalYear = new FiscalYear(this, from, to);
-
-    //Let the extensions do their work on the fiscal year before inserting it.
-    var args = Array.prototype.slice.call(arguments);
-    args.splice(0, 2);
-    args.unshift(fiscalYear);
-
-    this.extensionHandler.callMethods("createFiscalYear", args);
-
-    if(!this.fiscalYears.length) {
-        this.fiscalYears.push(fiscalYear);
-    } else {
-        var start = _.first(this.fiscalYears).from;
-        var end = _.last(this.fiscalYears).to;
-
-        if(oneDayDiff(start, fiscalYear.to)) {
-            this.fiscalYears.unshift(fiscalYear);
-        } else if(oneDayDiff(fiscalYear.from, end)) {
-            this.fiscalYears.push(fiscalYear);
-        } else {
-            throw new Error("The fiscal year must be adjacent to the current range.");
-        }
-    }
+    //Let the extensions do their work on the fiscal year.
+    this.extensionHandler.callMethods("createFiscalYear", [fiscalYear, from, to]);
 
     return fiscalYear;
 };
@@ -310,20 +287,7 @@ Book.prototype.createFiscalYear = function(from, to) {
  * @return {?FiscalYear} Returns the fiscal year that matched to selector. If not found null will be returned.
  */
 Book.prototype.getFiscalYear = function(selector) {
-    if(_.isNumber(selector)) {
-        return this.fiscalYears[selector - 1] || null;
-    }
-
-    var found = null;
-
-    _.forEach(this.fiscalYears, function(fy) {
-        if(dateUtils.isInsideDates(selector, fy.from, fy.to)) {
-            found = fy;
-            return false;
-        }
-    });
-
-    return found;
+    return this.fiscalYearHandler.get(selector);
 };
 
 /**
@@ -332,5 +296,5 @@ Book.prototype.getFiscalYear = function(selector) {
  * @returns {?FiscalYear} The chronologically last fiscal year. If no fiscal years present, null will be returned.
  */
 Book.prototype.getLastFiscalYear = function() {
-    return _.last(this.fiscalYears) || null;
+    return this.fiscalYearHandler.getLast();
 };
